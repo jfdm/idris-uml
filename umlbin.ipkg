@@ -1,0 +1,9 @@
+package umlbin
+
+opts = "-p lightyear -p effects -p uml"
+
+modules = Main
+
+main = Main
+sourcedir = src
+executable = a.out

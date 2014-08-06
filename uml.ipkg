@@ -1,0 +1,13 @@
+package uml
+
+opts = "-p lightyear -p effects"
+
+sourcedir = src
+
+modules = UML
+        , UML.ClassDiagram
+        , UML.ClassDiagram.Model
+        , UML.ClassDiagram.Model.Show
+        , UML.ClassDiagram.Model.Eq
+
+        , UML.ClassDiagram.Parser
