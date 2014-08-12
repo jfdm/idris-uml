@@ -1,20 +1,21 @@
 module UML.ClassDiagram.Parser
 
-import Control.Monad.State
-
 import Lightyear.Core
 import Lightyear.Combinators
 import Lightyear.Strings
 
 import UML.ClassDiagram.Model
 
-%access public
+%access private
 
 ident : Parser String
 ident = map pack (some $ satisfy isAlphaNum)
 
 literallyBetween : Char -> Parser String
 literallyBetween c = map pack $ between (char c) (char c) (some (satisfy (/= c)))
+
+eol : Parser ()
+eol = char '\n'
 
 -- -------------------------------------------------------------------- [ Misc ]
 modifier : Parser Modifier
@@ -130,16 +131,27 @@ emptyClass = do
     pure c
   <?> "Empty Class"
 
+
 element : Parser (Maybe Attribute, Maybe Method)
 element = do a <- attribute
+             eol
              pure (Just a, Nothing)
       <|> do m <- method
+             eol
              pure (Nothing, Just m)
       <?> "Element"
-
+{-
+element : Parser (Either Attribute Method)
+element = do a <- attribute
+             eol
+             pure $ Left a
+      <|> do m <- method
+             eol
+             pure $ Right m
+-}
 classBody : Parser (Attributes, Methods)
 classBody = do
-    es <- many element
+    es <- some element
     let (as', ms') = unzip es
     pure (catMaybes as', catMaybes ms')
 
