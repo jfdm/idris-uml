@@ -28,6 +28,6 @@ step = do
 public
 parseSD : Parser SeqDiagram
 parseSD = do
-    ss <- some step
+    ss <- some (step <$ space)
     pure ss
   <?> "Parse Sequence Diagram"
