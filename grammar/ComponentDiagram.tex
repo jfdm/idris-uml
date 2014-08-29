@@ -1,0 +1,62 @@
+\documentclass[pdftex]{article}
+
+\usepackage{backnaur}
+\usepackage[active, tightpage]{preview}
+
+\PreviewEnvironment{bnf}
+\begin{document}
+
+\begin{bnf}
+\bnfprod{CompDia}{%
+  \bnfpn{components}+
+  \bnfsp
+  \bnfpn{interfaces}+
+  \bnfsp
+  \bnfpn{rels}+
+}\\
+\bnfprod{components}{%
+  \bnfpn{simpleComp}
+  \bnfor
+  \bnfpn{complexComp}
+}\\
+\bnfprod{complexComp}{%
+  \bnfpn{simpleComp}
+  \bnfsp
+  \bnfpn{compBody}
+}\\
+\bnfprod{compBody}{%
+  \bnfts{`\{'}
+  \bnfsp
+  \bnfpn{components}+
+  \bnfsp
+  \bnfpn{interfaces}+
+  \bnfsp
+  \bnfpn{rels}+
+  \bnfsp
+  \bnfts{`\}'}
+}\\
+\bnfprod{simpleComp}{%
+  \bnfts{component}
+  \bnfsp
+  \bnfpn{ident}
+}\\
+\bnfprod{interfaces}{%
+  \bnfts{interface}
+  \bnfsp
+  \bnfpn{ident}
+}\\
+\bnfprod{rels}{%
+  \bnfpn{ident}
+  \bnfsp
+  (\bnfts{requires}\bnfor\bnfts{provides})
+  \bnfsp
+  \bnfpn{ident}
+}
+\end{bnf}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

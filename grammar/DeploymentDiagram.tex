@@ -1,0 +1,149 @@
+\documentclass[pdftex]{article}
+
+\usepackage{backnaur}
+\usepackage[active, tightpage]{preview}
+
+\PreviewEnvironment{bnf}
+\begin{document}
+
+\begin{bnf}
+\bnfprod{DepDia}{%
+  \bnfpn{devices}+
+  \bnfsp
+  \bnfpn{envs}+
+  \bnfsp
+  \bnfpn{artifacts}+
+  \bnfsp
+  \bnfpn{specs}*
+  \bnfsp
+  \bnfpn{rels}
+}\\
+\bnfprod{devices}{%
+  \bnfts{device}
+  \bnfsp
+  \bnfpn{devType}
+  \bnfsp
+  \bnfpn{ident}
+  \bnfsp
+  \bnfpn{kvBody}?
+}\\
+\bnfprod{devType}{%
+  \bnfts{server}
+  \bnfor
+  \bnfts{device}
+  \bnfor
+  \bnfts{workstation}
+  \bnfor
+  \bnfts{mobile}
+  \bnfor
+  \bnfts{embed}
+}\\
+\bnfprod{envs}{%
+  \bnfts{env}
+  \bnfsp
+  \bnfpn{envType}
+  \bnfsp
+  \bnfpn{ident}
+  \bnfsp
+  \bnfpn{kvBody}?
+}\\
+\bnfprod{envType}{%
+  \bnfts{os}
+  \bnfor
+  \bnfts{engine}
+  \bnfor
+  \bnfts{container}
+  \bnfor
+  \bnfts{server}
+  \bnfor
+  \bnfts{application}
+}\\
+\bnfprod{artifacts}{%
+  \bnfts{artifact}
+  \bnfsp
+  \bnfpn{artType}
+  \bnfsp
+  \bnfpn{ident}
+}\\
+\bnfprod{artType}{%
+  \bnfts{doc}
+  \bnfor
+  \bnfts{src}
+  \bnfor
+  \bnfts{lib}
+  \bnfor
+  \bnfts{exe}
+  \bnfor
+  \bnfts{script}
+  \bnfor
+  \bnfts{app}
+}\\
+\bnfprod{specs}{%
+  \bnfts{spec}
+  \bnfsp
+  \bnfpn{ident}
+  \bnfsp
+  \bnfpn{kvBody}
+}\\
+\bnfprod{rels}{%
+  \bnfpn{specRel}
+  \bnfor
+  \bnfpn{hostsRel}
+  \bnfor
+  \bnfpn{runsRel}
+  \bnfor
+  \bnfpn{comsRel}
+}\\
+\bnfprod{specRel}{%
+  \bnfts{`spec id'}
+  \bnfsp
+  \bnfts{specs}
+  \bnfsp
+  \bnfts{`art id'}
+}\\
+\bnfprod{hostsRel}{%
+  \bnfts{`dev id'}
+  \bnfsp
+  \bnfts{hosts}
+  \bnfsp
+  \bnfts{`exe env'}
+}\\
+\bnfprod{runsRel}{%
+  \bnfpn{ident} %% exe env
+  \bnfsp
+  \bnfts{runs}
+  \bnfsp
+  \bnfpn{ident} %% artifact
+}\\
+\bnfprod{comsRel}{%
+  \bnfts{ident} %% device/exe
+  \bnfsp
+  \bnfts{comsWith}
+  \bnfsp
+  \bnfpn{ident} %% device/exe
+  \bnfsp
+  \bnfts{via}
+  \bnfsp
+  \bnfpn{string} %% protocol
+}\\
+\bnfprod{kvBody}{%
+  \bnfts{`\{'}
+  \bnfsp
+  \bnfpn{kvpair}
+  \bnfsp
+  (\bnfts{`,'}\bnfsp\bnfpn{kvpair})+
+  \bnfts{`\}'}
+}\\
+\bnfprod{kvpair}{%
+  \bnfpn{string}
+  \bnfts{`:'}
+  \bnfpn{string}
+}
+\end{bnf}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
