@@ -1,0 +1,67 @@
+device server presentation
+device server policy
+device server product
+device server rating
+device server db
+device server dir
+device server doc
+device workstation desktop
+
+env appserver presappserver
+env appserver policyappserver
+env appserver prodappserver
+env engine    prodrulesengine
+env os        workstationos
+env appserver ratingappserver
+env engine    ratingrulesengine
+env engine    dbms
+env os        docserver
+env app       ldap
+
+artifact exe policyadminui
+artifact exe policyserver
+artifact exe productserver
+artifact exe productrules
+artifact exe productserverui
+artifact exe docmngmtsys
+artifact doc schemaproduct
+artifact doc schemapolicy
+artifact doc GrpUsrheirarchy
+artifact exe uwriteengine
+artifact exe uratingengine
+artifact doc ratingRules
+artifact doc uwriteRules
+
+presentation hosts presappserver
+preapppserver runs policadminui
+
+policy hosts policyappserver
+policyappserver runs policyserver
+
+product hosts prodappserver
+prodappserver runs productserver
+
+product hosts prodrulesengine
+prodrulesengine runs productrules
+
+workstation hosts workstationos
+workstationos runs productserverui
+
+doc hosts docserver
+docserver runs docmngmtsys
+
+db hosts dbms
+dbms runs schemapolicy
+dbms runs schemaproduct
+
+dir hosts ldap
+ldap runs GrpUsrheirarchy
+
+rating hosts ratingappserver
+rating hosts ratingrulesengine
+
+ratingappserver runs uwriteengine
+ratingappserver runs uratingengine
+
+ratingrulesengine runs ratingRules
+ratingrulesengine runs uwriteRules

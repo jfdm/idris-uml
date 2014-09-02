@@ -1,0 +1,7 @@
+Class Bob {
+  + ad : String
+}
+
+Class Alice
+
+Bob --> Alice
