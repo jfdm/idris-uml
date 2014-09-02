@@ -23,26 +23,28 @@ instance Show ArtifactTy where
   show Executable = "Executable"
   show Script     = "Script"
 
-instance Show Device where
-  show (MkDevice ty id as) = unwords ["Device", show ty, show id, show as]
-
-instance Show Env where
-  show (MkEnv ty id as) = unwords ["Env", show ty, show id, show as]
+instance Show Specification where
+  show (MkSpec id as) = unwords
+       ["[Specification", show id, show as, "]"]
 
 instance Show Artifact where
-  show (MkArtifact ty id) = unwords ["Artifact", show ty, show id]
+  show (MkArtifact ty id spec) = unwords
+       ["[Artifact", show ty, show id, show spec, "]"]
 
-instance Show Specification where
-  show (MkSpec id as) = unwords ["Specfification", show id, show as]
+instance Show Env where
+  show (MkEnv ty id as ps) = unwords
+       ["[Env", show ty, show id, show as, show ps, "]"]
+
+instance Show Device where
+  show (MkDevice ty id es as) = unwords
+       ["[Device", show ty, show id, show es, show as, "]"]
 
 instance Show Relation where
-  show (AssignSpec sID artID) = unwords ["AssignSpec", show sID, show artID]
-  show (Hosts dID eID) = unwords ["Hosts", show dID, show eID]
-  show (Runs eID aID) = unwords ["Runs", eID, aID]
-  show (Comms xID yID proto) = unwords ["Comms", show xID, show yID, show proto]
+  show (MkRelation xID yID proto) = unwords
+       ["Relation", show xID, show yID, show proto]
 
 instance Show DeployDiagram where
-  show (MkDeployDiagram ds es as ss es) = unwords ["DeployDia",
-       show ds, show es, show as, show ss, show es]
+  show (MkDeployDiagram ds rs) = unwords
+       ["[DeployDia", show ds, show rs, "]"]
 
 -- --------------------------------------------------------------------- [ EOF ]

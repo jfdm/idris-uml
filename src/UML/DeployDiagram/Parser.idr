@@ -6,6 +6,7 @@ import Lightyear.Strings
 
 import UML.DeployDiagram.Model
 
+%access public
 
 ident : Parser String
 ident = map pack (some $ satisfy isAlphaNum)
@@ -26,54 +27,35 @@ kvpair = do
   <?> "KV Pair"
 
 kvBody : Parser Attributes
-kvBody = braces $ commaSep1 kvpair
+kvBody = braces $ (commaSep1 (kvpair <$ space) <$ space)
   <?> "KV Body"
+
+properties : Parser Attributes
+properties = do
+    token "properties"
+    ps <- kvBody
+    pure ps
+  <?> "Properties"
+
 -- --------------------------------------------------------------- [ Relations ]
 
-comms : Parser Relation
-comms = do
+relation : Parser Relation
+relation = do
     xID <- ident <$ space
     token "commsWith"
     yID <- ident <$ space
     token "via"
     proto <- ident <$ space
-    pure $ Comms xID yID proto
-  <?> "Communicates with"
-
-runs : Parser Relation
-runs = do
-    xID <- ident <$ space
-    token "runs"
-    yID <- ident <$ space
-    pure $ Runs xID yID
-  <?> "Run Artifact"
-
-hosts : Parser Relation
-hosts = do
-    xID <- ident <$ space
-    token "hosts"
-    yID <- ident <$ space
-    pure $ Hosts xID yID
-  <?> "Hosts Execution Environment"
-
-specs : Parser Relation
-specs = do
-    xID <- ident <$ space
-    token "specs"
-    yID <- ident <$ space
-    pure $ AssignSpec xID yID
-  <?> "Assign Specification"
-
-relation : Parser Relation
-relation = specs <|> hosts <|> runs <|> comms <?> "Relation"
+    pure $ MkRelation xID yID proto
+  <?> "Relation"
 
 -- ----------------------------------------------------------- [ Specification ]
 
 spec : Parser Specification
 spec = do
-    token "specification"
+    token "spec"
     id <- ident <$ space
-    as <- kvBody
+    as <- opt kvBody
     pure $ MkSpec id as
 
 -- ---------------------------------------------------------------- [ Artifact ]
@@ -96,7 +78,15 @@ artifact = do
     token "artifact"
     ty <- artifactTy
     id <- ident <$ space
-    pure $ MkArtifact ty id
+    s <- opt artBody
+    pure $ MkArtifact ty id s
+   <?> "Artifact"
+  where
+    artBody : Parser (Specification)
+    artBody = do
+      token "with" <$ space
+      s <- spec
+      pure s
 
 -- ----------------------------------------------------------------- [ Exe Env ]
 
@@ -118,9 +108,15 @@ exenv = do
     token "env"
     ty <- envTy <$ space
     id <- ident <$ space
-    as <- opt kvBody
-    pure $ MkEnv ty id as
-  <?> "Execution Environment"
+    (as, ps) <- braces (exenvBody <$ space)
+    pure $ MkEnv ty id as ps
+   <?> "Execution Environment"
+  where
+    exenvBody : Parser (Artifacts, Maybe Attributes)
+    exenvBody = do
+      as <- some (artifact <$ space)
+      ps <- opt properties <$ space
+      pure (as, ps)
 
 -- ----------------------------------------------------------------- [ Devices ]
 devTy : Parser DeviceTy
@@ -139,18 +135,21 @@ device = do
     token "device"
     ty <- opt devTy
     id <- ident <$ space
-    as <- opt kvBody
-    pure $ MkDevice (fromMaybe GenericDev ty) id as
-
+    (es, ps) <- braces $ deviceBody
+    pure $ MkDevice (fromMaybe GenericDev ty) id es ps
+   <?> "Device"
+  where
+    deviceBody : Parser (Envs, Maybe Attributes)
+    deviceBody = do
+      es <- some (exenv <$ space)
+      ps <- opt properties <$ space
+      pure (es, ps)
 
 public
 parseDD : Parser DeployDiagram
 parseDD = do
     ds <- some (device <$ space)
-    es <- some (exenv <$ space)
-    as <- some (artifact <$ space)
-    ss <- opt $ some (spec <$ space)
     rs <- some (relation <$ space)
-    pure $ MkDeployDiagram ds es as ss rs
+    pure $ MkDeployDiagram ds rs
   <?> "Deployment Diagram"
 -- --------------------------------------------------------------------- [ EOF ]

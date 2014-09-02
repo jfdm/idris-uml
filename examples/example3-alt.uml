@@ -1,22 +1,21 @@
 device server presentation {
     env appserver presentation {
-        artifact exe policyAdminUI.war with spec called spec.xml {
-            a : "asas"
+        artifact exe policyAdminUIwar with spec specxml {
+            a : "asas",
             b : "asas"
         }
     }
     properties {
-        a : "sdsd"
+        a : "sdsd",
         b : "asas"
     }
-
 }
 
 device server policy {
     env appserver policy {
-        artifact exe policyServer.jar
+        artifact exe policyServerjar with spec specxml
         properties {
-            a : "sdsd"
+            a : "sdsd",
             b : "asas"
         }
     }
@@ -24,9 +23,8 @@ device server policy {
 
 device server product {
     env appserver product {
-        artifact exe productServer.jar
+        artifact exe productServerjar
     }
-
     env engine rules {
         artifact doc rules
     }
@@ -34,7 +32,7 @@ device server product {
 
 device workstation user {
     env os workstation {
-        artifact exe productServerUI.exe
+        artifact exe productServerUIexe
     }
 }
 
@@ -44,27 +42,27 @@ device server documents {
     }
 }
 
-device server dbServer {
+device server dbserver {
     env engine dbms {
-        artifact doc schema_product
-        artifact doc schema_policy
+        artifact doc schemaproduct
+        artifact doc schemapolicy
     }
 }
 
 device server dirServer {
     env app ldapServer {
-        artifact GrpUsrheirarchy
+        artifact doc GrpUsrheirarchy
     }
 }
 
 device server uWriteRating {
     env engine rules {
-        artifact doc rating_rules
-        artifact doc under_writing_rules
+        artifact doc ratingrules
+        artifact doc underwritingrules
     }
     env appserver apps {
-        artifact app under_writing_engine.jar
-        artifact app rating_engine.jar
+        artifact exe underwritingenginejar
+        artifact exe ratingenginejar
     }
 }
 
