@@ -17,3 +17,11 @@ modules = UML
         , UML.SeqDiagram.Model.Show
         , UML.SeqDiagram.Model.Eq
         , UML.SeqDiagram.Parser
+
+        , UML.DeployDiagram
+        , UML.DeployDiagram.Model
+        , UML.DeployDiagram.Model.Show
+        , UML.DeployDiagram.Model.Eq
+        , UML.DeployDiagram.Parser
+
+        , UML.Utils.Readfile

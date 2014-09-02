@@ -1,24 +1,21 @@
 module Main
 
-import Effects
-import Effect.StdIO
-import Effect.System
-import Effect.Exception
-
 import UML
 
-dia : String
-dia = "Class Bob {\n + ad : String\n}\nClass Alice\nBob --> Alice\n"
+processArgs : List String -> Maybe String
+processArgs [x]       = Nothing
+processArgs (x::y::z) = Just y
 
-dia2 : String
-dia2 = "A -> B : Syn\n B -> A : Ack\n A -> B : Syn, Ack\n"
-
-umlMain : {[SYSTEM, EXCEPTION String, STDIO]} Eff ()
+umlMain : {UMLEffs} Eff ()
 umlMain = do
     args <- getArgs
-    case parse parseSD dia2 of
-      Left err => raise "Oops"
-      Right d  => putStrLn $ show d
+    case processArgs args of
+      Nothing => raise "Error parsing args"
+      Just fname => do
+        src <- readFile fname
+        case parse parseDD src of
+          Left err => putStrLn err
+          Right d  => putStrLn $ show d
 
 main : IO ()
 main = run umlMain
