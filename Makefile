@@ -25,7 +25,7 @@ check: clobber
 	${IDRIS} --checkpkg ${LIB}.ipkg
 
 clobber : clean
-	rm eddabin
+	rm a.out
 	find . -name "*.ibc" -delete
 
 test :
