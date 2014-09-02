@@ -1,12 +1,24 @@
 device server presentation {
     env appserver presentation {
-        artifact exe policyAdminUI.war
+        artifact exe policyAdminUI.war with spec called spec.xml {
+            a : "asas"
+            b : "asas"
+        }
     }
+    properties {
+        a : "sdsd"
+        b : "asas"
+    }
+
 }
 
 device server policy {
     env appserver policy {
         artifact exe policyServer.jar
+        properties {
+            a : "sdsd"
+            b : "asas"
+        }
     }
 }
 
