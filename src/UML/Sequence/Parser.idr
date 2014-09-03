@@ -1,12 +1,12 @@
-module UML.SeqDiagram.Parser
+module UML.Sequence.Parser
 
 import Lightyear.Core
 import Lightyear.Combinators
 import Lightyear.Strings
 
-import UML.SeqDiagram.Model
+import UML.Sequence.Model
 
-%access public
+%access private
 
 ident : Parser String
 ident = map pack (some $ satisfy isAlphaNum)
@@ -26,8 +26,8 @@ step = do
   <?> "Step"
 
 public
-parseSD : Parser SeqDiagram
-parseSD = do
-    ss <- some (step <$ space)
+sequencediagram : Parser SequenceDiagram
+sequencediagram = do
+    ss <- space $> some (step <$ space)
     pure ss
-  <?> "Parse Sequence Diagram"
+  <?> "Sequence Diagram"

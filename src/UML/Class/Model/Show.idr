@@ -1,6 +1,6 @@
-module UML.ClassDiagram.Model.Show
+module UML.Class.Model.Show
 
-import UML.ClassDiagram.Model
+import UML.Class.Model
 
 instance Show Modifier where
     show Abstract = "Abstract"
@@ -45,4 +45,4 @@ instance Show Relation where
 
 instance Show ClassDiagram where
     show (MkClassDiagram cs rs) = unwords
-         ["[ClassDiagram", show cs, show rs, "]"]
+         ["[Class", show cs, show rs, "]"]

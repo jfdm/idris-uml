@@ -1,6 +1,6 @@
-module UML.DeployDiagram.Model.Eq
+module UML.Deployment.Model.Eq
 
-import UML.DeployDiagram.Model
+import UML.Deployment.Model
 
 instance Eq DeviceTy where
   (==) GenericDev   GenericDev  = True
@@ -43,7 +43,7 @@ instance Eq Relation where
        xa == ya && xb == yb && xp == yp
   (==) _                      _                    = False
 
-instance Eq DeployDiagram where
-  (==) (MkDeployDiagram xds xrs) (MkDeployDiagram yds yrs) =
+instance Eq DeploymentDiagram where
+  (==) (MkDeployment xds xrs) (MkDeployment yds yrs) =
        xds == yds && xrs == yrs
 -- --------------------------------------------------------------------- [ EOF ]

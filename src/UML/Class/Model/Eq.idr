@@ -1,6 +1,6 @@
-module UML.ClassDiagram.Model.Eq
+module UML.Class.Model.Eq
 
-import UML.ClassDiagram.Model
+import UML.Class.Model
 
 instance Eq Modifier where
     (==) Abstract Abstract = True

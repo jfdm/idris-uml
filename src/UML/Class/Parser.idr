@@ -1,10 +1,10 @@
-module UML.ClassDiagram.Parser
+module UML.Class.Parser
 
 import Lightyear.Core
 import Lightyear.Combinators
 import Lightyear.Strings
 
-import UML.ClassDiagram.Model
+import UML.Class.Model
 
 %access private
 
@@ -41,7 +41,7 @@ visibility = do token "-"
 description : Parser String
 description = do
     colon
-    x <- literallyBetween '"'
+    x <- literallyBetween '\"'
     pure x
 
 relationType : Parser RelationTy
@@ -140,15 +140,7 @@ element = do a <- attribute
              eol
              pure (Nothing, Just m)
       <?> "Element"
-{-
-element : Parser (Either Attribute Method)
-element = do a <- attribute
-             eol
-             pure $ Left a
-      <|> do m <- method
-             eol
-             pure $ Right m
--}
+
 classBody : Parser (Attributes, Methods)
 classBody = do
     es <- some element
@@ -168,8 +160,8 @@ clazz = bodyClass <|> emptyClass <?> "Class"
 -- ----------------------------------------------------------- [ Class Diagram ]
 
 public
-parseCD : Parser ClassDiagram
-parseCD = do
+classdiagram : Parser ClassDiagram
+classdiagram = do
     cs <- some (clazz <$ space)
     rs <- some (relation <$ space)
     pure $ MkClassDiagram cs rs

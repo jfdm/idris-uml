@@ -1,6 +1,6 @@
-module UML.DeployDiagram.Model.Show
+module UML.Deployment.Model.Show
 
-import UML.DeployDiagram.Model
+import UML.Deployment.Model
 
 instance Show DeviceTy where
   show GenericDev  = "Generic"
@@ -41,10 +41,10 @@ instance Show Device where
 
 instance Show Relation where
   show (MkRelation xID yID proto) = unwords
-       ["Relation", show xID, show yID, show proto]
+       ["[Relation", show xID, show yID, show proto, "]"]
 
-instance Show DeployDiagram where
-  show (MkDeployDiagram ds rs) = unwords
+instance Show DeploymentDiagram where
+  show (MkDeployment ds rs) = unwords
        ["[DeployDia", show ds, show rs, "]"]
 
 -- --------------------------------------------------------------------- [ EOF ]

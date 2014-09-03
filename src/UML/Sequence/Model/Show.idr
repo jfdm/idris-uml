@@ -1,6 +1,6 @@
-module UML.SeqDiagram.Model.Show
+module UML.Sequence.Model.Show
 
-import UML.SeqDiagram.Model
+import UML.Sequence.Model
 
 instance Show MessageStep where
   show (MkStep f t ms) = unwords

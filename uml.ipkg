@@ -6,22 +6,28 @@ sourcedir = src
 
 modules = UML
 
-        , UML.ClassDiagram
-        , UML.ClassDiagram.Model
-        , UML.ClassDiagram.Model.Show
-        , UML.ClassDiagram.Model.Eq
-        , UML.ClassDiagram.Parser
+        , UML.Class
+        , UML.Class.Model
+        , UML.Class.Model.Show
+        , UML.Class.Model.Eq
+        , UML.Class.Parser
 
-        , UML.SeqDiagram
-        , UML.SeqDiagram.Model
-        , UML.SeqDiagram.Model.Show
-        , UML.SeqDiagram.Model.Eq
-        , UML.SeqDiagram.Parser
+        , UML.Sequence
+        , UML.Sequence.Model
+        , UML.Sequence.Model.Show
+        , UML.Sequence.Model.Eq
+        , UML.Sequence.Parser
 
-        , UML.DeployDiagram
-        , UML.DeployDiagram.Model
-        , UML.DeployDiagram.Model.Show
-        , UML.DeployDiagram.Model.Eq
-        , UML.DeployDiagram.Parser
+        , UML.Deployment
+        , UML.Deployment.Model
+        , UML.Deployment.Model.Show
+        , UML.Deployment.Model.Eq
+        , UML.Deployment.Parser
+
+        , UML.Component
+        , UML.Component.Model
+        , UML.Component.Model.Show
+        , UML.Component.Model.Eq
+        , UML.Component.Parser
 
         , UML.Utils.Readfile

@@ -1,4 +1,4 @@
-module UML.DeployDiagram.Model
+module UML.Deployment.Model
 
 ||| The different types of device type supported.
 data DeviceTy = GenericDev | Server | Workstation | Mobile | Embedded
@@ -102,12 +102,12 @@ Relations : Type
 Relations = List Relation
 
 ||| A model for UML Deployment Diagrams.
-data DeployDiagram : Type where
+data DeploymentDiagram : Type where
   ||| Construct a Deployment Diagram
   |||
   ||| @ds The physical devices.
   ||| @rs The relations between the devices.
-  MkDeployDiagram : (ds : Devices)
-                  -> (rs : Relations)
-                  -> DeployDiagram
+  MkDeployment : (ds : Devices)
+               -> (rs : Relations)
+               -> DeploymentDiagram
 -- --------------------------------------------------------------------- [ EOF ]

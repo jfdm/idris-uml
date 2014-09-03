@@ -1,10 +1,10 @@
-module UML.DeployDiagram.Parser
+module UML.Deployment.Parser
 
 import Lightyear.Core
 import Lightyear.Combinators
 import Lightyear.Strings
 
-import UML.DeployDiagram.Model
+import UML.Deployment.Model
 
 %access public
 
@@ -146,10 +146,10 @@ device = do
       pure (es, ps)
 
 public
-parseDD : Parser DeployDiagram
-parseDD = do
+deploymentdiagram : Parser DeploymentDiagram
+deploymentdiagram = do
     ds <- some (device <$ space)
     rs <- some (relation <$ space)
-    pure $ MkDeployDiagram ds rs
+    pure $ MkDeployment ds rs
   <?> "Deployment Diagram"
 -- --------------------------------------------------------------------- [ EOF ]
