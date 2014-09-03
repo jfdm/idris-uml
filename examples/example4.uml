@@ -1,0 +1,52 @@
+component Accounting {
+  provides ManageOrders from Orders
+  provides ManageCustomers from Customers
+  requires ManageInventory from Warehouses
+
+  component Customers {
+    provides ManageCustomers
+  }
+
+  component Orders {
+    provides ManageOrders
+    requires ManageCustomers from Customers
+    requires ManageInventory from Warehouses
+  }
+}
+
+component Warehouses {
+  provides SearchInventory from Inventory
+  provides ManageInventory from Inventory
+
+  component Inventory {
+    provides SearchInventory
+    provides ManageInventory
+  }
+}
+
+component WebStore {
+  provides ProductSearch from SearchEngine
+  provides OnlineShopping from ShoppingCart
+  provides UserSession from Authentication
+
+  requires SearchInventory from Warehouses
+  requires ManageOrders from Accounting
+  requires ManageCustomers from Accounting
+
+  component Authentication {
+    provides UserSession
+    requires ManageCustomers from Accounting
+  }
+
+  component ShoppingCart {
+    provides OnlineShopping
+    requires UserSession from Authentication
+    requires ManageOrders from Accounting
+  }
+
+  component SearchEngine {
+    provides ProductSearch
+    requires SearchInventory from Warehouses
+  }
+
+}

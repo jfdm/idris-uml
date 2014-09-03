@@ -13,7 +13,7 @@ umlMain = do
       Nothing => raise "Error parsing args"
       Just fname => do
         src <- readFile fname
-        case parse parseDD src of
+        case parse parseCompDia src of
           Left err => putStrLn err
           Right d  => putStrLn $ show d
 
