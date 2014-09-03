@@ -1,67 +1,76 @@
-device server presentation
-device server policy
-device server product
-device server rating
-device server db
-device server dir
-device server doc
-device workstation desktop
+device server presentation {
+    env appserver presentation {
+        artifact exe policyAdminUIwar with spec specxml {
+            a : "asas",
+            b : "asas"
+        }
+    }
+    properties {
+        a : "sdsd",
+        b : "asas"
+    }
+}
 
-env appserver presappserver
-env appserver policyappserver
-env appserver prodappserver
-env engine    prodrulesengine
-env os        workstationos
-env appserver ratingappserver
-env engine    ratingrulesengine
-env engine    dbms
-env os        docserver
-env app       ldap
+device server policy {
+    env appserver policy {
+        artifact exe policyServerjar with spec specxml
+        properties {
+            a : "sdsd",
+            b : "asas"
+        }
+    }
+}
 
-artifact exe policyadminui
-artifact exe policyserver
-artifact exe productserver
-artifact exe productrules
-artifact exe productserverui
-artifact exe docmngmtsys
-artifact doc schemaproduct
-artifact doc schemapolicy
-artifact doc GrpUsrheirarchy
-artifact exe uwriteengine
-artifact exe uratingengine
-artifact doc ratingRules
-artifact doc uwriteRules
+device server product {
+    env appserver product {
+        artifact exe productServerjar
+    }
+    env engine rules {
+        artifact doc rules
+    }
+}
 
-presentation hosts presappserver
-preapppserver runs policadminui
+device workstation user {
+    env os workstation {
+        artifact exe productServerUIexe
+    }
+}
 
-policy hosts policyappserver
-policyappserver runs policyserver
+device server documents {
+    env os server {
+        artifact exe docMngmntSystem
+    }
+}
 
-product hosts prodappserver
-prodappserver runs productserver
+device server dbserver {
+    env engine dbms {
+        artifact doc schemaproduct
+        artifact doc schemapolicy
+    }
+}
 
-product hosts prodrulesengine
-prodrulesengine runs productrules
+device server dirServer {
+    env app ldapServer {
+        artifact doc GrpUsrheirarchy
+    }
+}
 
-workstation hosts workstationos
-workstationos runs productserverui
+device server uWriteRating {
+    env engine rules {
+        artifact doc ratingrules
+        artifact doc underwritingrules
+    }
+    env appserver apps {
+        artifact exe underwritingenginejar
+        artifact exe ratingenginejar
+    }
+}
 
-doc hosts docserver
-docserver runs docmngmtsys
-
-db hosts dbms
-dbms runs schemapolicy
-dbms runs schemaproduct
-
-dir hosts ldap
-ldap runs GrpUsrheirarchy
-
-rating hosts ratingappserver
-rating hosts ratingrulesengine
-
-ratingappserver runs uwriteengine
-ratingappserver runs uratingengine
-
-ratingrulesengine runs ratingRules
-ratingrulesengine runs uwriteRules
+presentation commsWith policy via http
+policy commsWith uWriteRating via http
+policy commsWith dirServer via http
+policy commsWith dbServer via http
+policy commsWith docServer via http
+dbServer commsWith product via http
+product commsWith docServer via http
+user commsWith product via http
