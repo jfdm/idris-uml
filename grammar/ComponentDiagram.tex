@@ -8,47 +8,28 @@
 
 \begin{bnf}
 \bnfprod{CompDia}{%
-  \bnfpn{components}+
-  \bnfsp
-  \bnfpn{interfaces}+
-  \bnfsp
-  \bnfpn{rels}+
+  \bnfpn{component}+
 }\\
-\bnfprod{components}{%
-  \bnfpn{simpleComp}
-  \bnfor
-  \bnfpn{complexComp}
+\bnfprod{component}{%
+ \bnfpn{provides}+
+ \bnfsp
+ (\bnfpn{requires}+)?
+ \bnfsp
+ (\bnfpn{component}+)?
 }\\
-\bnfprod{complexComp}{%
-  \bnfpn{simpleComp}
-  \bnfsp
-  \bnfpn{compBody}
-}\\
-\bnfprod{compBody}{%
-  \bnfts{`\{'}
-  \bnfsp
-  \bnfpn{components}+
-  \bnfsp
-  \bnfpn{interfaces}+
-  \bnfsp
-  \bnfpn{rels}+
-  \bnfsp
-  \bnfts{`\}'}
-}\\
-\bnfprod{simpleComp}{%
-  \bnfts{component}
+\bnfprod{provides}{%
+  \bnfts{provides}
   \bnfsp
   \bnfpn{ident}
+  \bnfsp
+  (\bnfts{from}\bnfsp\bnfpn(ident))?
 }\\
-\bnfprod{interfaces}{%
-  \bnfts{interface}
+\bnfprod{requires}{%
+  \bnfts{requires}
   \bnfsp
   \bnfpn{ident}
-}\\
-\bnfprod{rels}{%
-  \bnfpn{ident}
   \bnfsp
-  (\bnfts{requires}\bnfor\bnfts{provides})
+  \bnfts{from}
   \bnfsp
   \bnfpn{ident}
 }
