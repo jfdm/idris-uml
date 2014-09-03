@@ -48,8 +48,8 @@ component = do
 
 -- ----------------------------------------------------------------- [ Diagram ]
 
-parseCompDia : Parser ComponentDiagram
-parseCompDia = do
+componentdiagram : Parser ComponentDiagram
+componentdiagram = do
     cs <- space $> some (component <$ space)
     pure cs
   <?> "Component Diagram"
