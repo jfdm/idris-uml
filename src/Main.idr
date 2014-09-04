@@ -10,16 +10,21 @@ record Opts : Type where
            -> (modelTy : Flag.UML)
            -> Opts
 
+usage : String
+usage = """Usage: ./a.out [--class | --sequence | --deployment | --component] [FILE]
+
+This exemplar program reads in a UML model from file and returns the corresponding ADT to STDOUT.
+"""
 
 processArgs : List String -> {[EXCEPTION String]} Eff Opts
-processArgs [x] = raise "Not enough arguments"
+processArgs [x] = raise usage
 processArgs (x::xs) with (xs)
     | (y::z::ys) = case y of
       "--class"      => pure $ MkOpts z Flag.Clazz
       "--sequence"   => pure $ MkOpts z Flag.Sequence
       "--deployment" => pure $ MkOpts z Flag.Deployment
       "--component"  => pure $ MkOpts z Flag.Component
-      otherwise      => raise "Unrecognised flag"
+      otherwise      => raise usage
     | Nil = raise "No arguments"
 
 doParse : Parser a -> String -> {[EXCEPTION String]} Eff a
@@ -38,6 +43,6 @@ umlMain = do
       Flag.Deployment => putStrLn $ show !(doParse deploymentdiagram src)
       Flag.Component  => putStrLn $ show !(doParse componentdiagram src)
 
-
 main : IO ()
 main = run umlMain
+-- --------------------------------------------------------------------- [ EOF ]
