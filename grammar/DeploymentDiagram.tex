@@ -1,31 +1,27 @@
 \documentclass[pdftex]{article}
 
-\usepackage{backnaur}
+\usepackage[tstt]{backnaur}
 \usepackage[active, tightpage]{preview}
-
+\usepackage{lmodern}
 \PreviewEnvironment{bnf}
 \begin{document}
-
+\small
 \begin{bnf}
 \bnfprod{DepDia}{%
-  \bnfpn{devices}+
+  \bnfpn{device}+
   \bnfsp
-  \bnfpn{envs}+
-  \bnfsp
-  \bnfpn{artifacts}+
-  \bnfsp
-  \bnfpn{specs}*
-  \bnfsp
-  \bnfpn{rels}
+  \bnfpn{relation}+
 }\\
-\bnfprod{devices}{%
+\bnfprod{device}{%
   \bnfts{device}
   \bnfsp
   \bnfpn{devType}
   \bnfsp
   \bnfpn{ident}
   \bnfsp
-  \bnfpn{kvBody}?
+  \bnfpn{exenv}+
+  \bnfsp
+  \bnfpn{properties}?
 }\\
 \bnfprod{devType}{%
   \bnfts{server}
@@ -45,7 +41,9 @@
   \bnfsp
   \bnfpn{ident}
   \bnfsp
-  \bnfpn{kvBody}?
+  \bnfpn{artifact}+
+  \bnfsp
+  \bnfpn{properties}?
 }\\
 \bnfprod{envType}{%
   \bnfts{os}
@@ -58,12 +56,14 @@
   \bnfor
   \bnfts{application}
 }\\
-\bnfprod{artifacts}{%
+\bnfprod{artifact}{%
   \bnfts{artifact}
   \bnfsp
   \bnfpn{artType}
   \bnfsp
   \bnfpn{ident}
+  \bnfsp
+  (\bnfts{with}\bnfsp\bnfpn{specification})?
 }\\
 \bnfprod{artType}{%
   \bnfts{doc}
@@ -78,45 +78,15 @@
   \bnfor
   \bnfts{app}
 }\\
-\bnfprod{specs}{%
+\bnfprod{specification}{%
   \bnfts{spec}
   \bnfsp
   \bnfpn{ident}
   \bnfsp
-  \bnfpn{kvBody}
+  \bnfpn{kvBody}?
 }\\
-\bnfprod{rels}{%
-  \bnfpn{specRel}
-  \bnfor
-  \bnfpn{hostsRel}
-  \bnfor
-  \bnfpn{runsRel}
-  \bnfor
-  \bnfpn{comsRel}
-}\\
-\bnfprod{specRel}{%
-  \bnfts{`spec id'}
-  \bnfsp
-  \bnfts{specs}
-  \bnfsp
-  \bnfts{`art id'}
-}\\
-\bnfprod{hostsRel}{%
-  \bnfts{`dev id'}
-  \bnfsp
-  \bnfts{hosts}
-  \bnfsp
-  \bnfts{`exe env'}
-}\\
-\bnfprod{runsRel}{%
-  \bnfpn{ident} %% exe env
-  \bnfsp
-  \bnfts{runs}
-  \bnfsp
-  \bnfpn{ident} %% artifact
-}\\
-\bnfprod{comsRel}{%
-  \bnfts{ident} %% device/exe
+\bnfprod{relation}{%
+  \bnfpn{ident} %% device/exe
   \bnfsp
   \bnfts{comsWith}
   \bnfsp
@@ -125,6 +95,11 @@
   \bnfts{via}
   \bnfsp
   \bnfpn{string} %% protocol
+}\\
+\bnfprod{properties}{%
+  \bnfts{properties}
+  \bnfsp
+  \bnfpn{kvBody}
 }\\
 \bnfprod{kvBody}{%
   \bnfts{`\{'}
@@ -137,7 +112,7 @@
 \bnfprod{kvpair}{%
   \bnfpn{string}
   \bnfts{`:'}
-  \bnfpn{string}
+  \bnfpn{lit\_string}
 }
 \end{bnf}
 
