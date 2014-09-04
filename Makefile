@@ -7,7 +7,7 @@ OPTS  :=
 
 .PHONY: clean build
 
-exe: install
+exe: lib
 	${IDRIS} ${OPTS} --build ${BIN}.ipkg
 
 install: lib
