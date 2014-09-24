@@ -40,7 +40,9 @@ umlMain = do
     case modelTy opts of
       Flag.Clazz      => putStrLn $ show !(doParse classdiagram src)
       Flag.Sequence   => putStrLn $ show !(doParse sequencediagram src)
-      Flag.Deployment => putStrLn $ show !(doParse deploymentdiagram src)
+      Flag.Deployment => do
+        m <- doParse deploymentdiagram src
+        putStrLn $ show m
       Flag.Component  => putStrLn $ show !(doParse componentdiagram src)
 
 main : IO ()

@@ -1,3 +1,9 @@
+-- -------------------------------------------------------------- [ Parser.idr ]
+-- Module      : UML.Deployment.Parser
+-- Description : Parser for textual UML deployment diagrams.
+-- Copyright   : (c) Jan de Muijnck-Hughes
+-- License     : see LICENSE
+-- --------------------------------------------------------------------- [ EOH ]
 module UML.Deployment.Parser
 
 import Lightyear.Core
@@ -8,16 +14,25 @@ import UML.Deployment.Model
 
 %access public
 
+||| Identifiers
 ident : Parser String
 ident = map pack (some $ satisfy isAlphaNum)
 
-literallyBetween : Char -> Parser String
+||| Parser stuff between given character.
+|||
+||| @c The deliminator.
+literallyBetween : (c : Char) -> Parser String
 literallyBetween c = map pack $ between (char c) (char c) (some (satisfy (/= c)))
 
+||| End of line character.
 eol : Parser ()
 eol = char '\n'
 
 -- -------------------------------------------------------------------- [ Misc ]
+||| Parse a key-value pair.
+|||
+||| Key value pairs are of the form: `<key> : "<value>"`.
+|||
 kvpair : Parser Attribute
 kvpair = do
     key <- ident <$ space
@@ -26,10 +41,12 @@ kvpair = do
     pure (key, value)
   <?> "KV Pair"
 
+||| Parse pair of braces containing many comma separated KV pairs.
 kvBody : Parser Attributes
 kvBody = braces $ (commaSep1 (kvpair <$ space) <$ space)
   <?> "KV Body"
 
+||| Parse several properties.
 properties : Parser Attributes
 properties = do
     token "properties"
@@ -38,7 +55,7 @@ properties = do
   <?> "Properties"
 
 -- --------------------------------------------------------------- [ Relations ]
-
+||| Parse a relation defined between two entities.
 relation : Parser Relation
 relation = do
     xID <- ident <$ space
