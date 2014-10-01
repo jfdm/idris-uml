@@ -1,14 +1,39 @@
+data String
+
+data User {
+  id : String,
+  name : String
+}
+
+data Item {
+  id : String,
+  name : String,
+  desc : String
+}
+
+data Order {
+  id : String,
+  item : Items
+}
+
 component Accounting {
   provides ManageOrders from Orders
   provides ManageCustomers from Customers
   requires ManageInventory from Warehouses
 
   component Customers {
-    provides ManageCustomers
+    interface ManageCustomers {
+      addCustomer : (c : Customer) -> Bool
+      removeCustomer : (c : Customer) -> Bool
+    }
   }
 
   component Orders {
-    provides ManageOrders
+    interface ManageOrders {
+      createOrder : Int
+      addToOrder : (p : Product) -> (orderID : Int) -> Bool
+      removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
+    }
     requires ManageCustomers from Customers
     requires ManageInventory from Warehouses
   }
@@ -19,8 +44,15 @@ component Warehouses {
   provides ManageInventory from Inventory
 
   component Inventory {
-    provides SearchInventory
-    provides ManageInventory
+    interface SearchInventory {
+      createOrder : Int
+      addToOrder : (p : Product) -> (orderID : Int) -> Bool
+      removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
+}
+    interface ManageInventory {
+      createOrder : Int
+      addToOrder : (p : Product) -> (orderID : Int) -> Bool
+      removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
   }
 }
 
@@ -34,18 +66,31 @@ component WebStore {
   requires ManageCustomers from Accounting
 
   component Authentication {
-    provides UserSession
+    interface UserSession {
+      createOrder : Int
+      addToOrder : (p : Product) -> (orderID : Int) -> Bool
+      removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
+}
     requires ManageCustomers from Accounting
   }
 
   component ShoppingCart {
-    provides OnlineShopping
+    interface OnlineShopping {
+      createOrder : Int
+      addToOrder : (p : Product) -> (orderID : Int) -> Bool
+      removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
+}
     requires UserSession from Authentication
     requires ManageOrders from Accounting
   }
 
   component SearchEngine {
-    provides ProductSearch
+    interface ProductSearch {
+      createOrder : Int
+      addToOrder : (p : Product) -> (orderID : Int) -> Bool
+      removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
+
+    }
     requires SearchInventory from Warehouses
   }
 

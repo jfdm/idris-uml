@@ -27,9 +27,11 @@ processArgs (x::xs) with (xs)
       otherwise      => raise usage
     | Nil = raise "No arguments"
 
-doParse : Parser a -> String -> {[EXCEPTION String]} Eff a
+doParse : Parser a -> String -> {[STDIO, EXCEPTION String]} Eff a
 doParse p src  = case parse p src of
-    Left err    => raise err
+    Left err    => do
+      putStrLn $ err
+      raise "Oops"
     Right model => pure model
 
 umlMain : {UMLEffs} Eff ()

@@ -5,9 +5,21 @@ import UML.Component.Model
 %default partial
 %access public
 
+
+instance Eq DType where
+    (==) (MkSType x)    (MkSType y)    = x == y
+    (==) (MkCType x xs) (MkCType y ys) = x == y && xs == ys
+    (==) _ _ = False
+
+instance Eq Function where
+    (==) (MkPFunc x xs xr) (MkPFunc y ys yr) = x == y && xs == ys && xr == yr
+    (==) (MkFunc x xr)     (MkFunc y yr)     = x == y && xr == yr
+    (==) _ _ = False
+
 instance Eq Interface where
-    (==) (Provides xn xo) (Provides yn yo) = xn == yn && xo == yo
-    (==) (Requires xn xo) (Requires yn yo) = xn == yn && xo == yo
+    (==) (Provided xn xo) (Provided yn yo) = xn == yn && xo == yo
+    (==) (Required xn xo) (Required yn yo) = xn == yn && xo == yo
+    (==) (Actual xn xf)   (Actual yn yf)   = xn == yn && xf == yf
     (==) _ _ = False
 
 
@@ -15,10 +27,18 @@ mutual
   private
   %assert_total
   componentEq : Component -> Component -> Bool
-  componentEq (MkComponent x xps xrs xcs) (MkComponent y yps yrs ycs) =
-           x == y && xps == yps && xrs == yrs && xcs == ycs
+  componentEq (MkComponent x xps xas xrs xcs) (MkComponent y yps yas yrs ycs) =
+           x == y &&
+           xps == yps &&
+           xas == yas &&
+           xrs == yrs &&
+           xcs == ycs
   componentEq _ _ = False
 
   instance Eq Component where
       (==) x y = componentEq x y
+
+instance Eq ComponentDiagram where
+    (==) (MkComponentDiagram xd xc) (MkComponentDiagram yd yc) = xd == yd && xc == yc
+
 -- --------------------------------------------------------------------- [ EOF ]

@@ -5,19 +5,76 @@ import Lightyear.Combinators
 import Lightyear.Strings
 
 import UML.Component.Model
+import UML.Utils.Parsing
 
 ident : Parser String
 ident = map pack (some $ satisfy isAlphaNum)
 
+
+-- -------------------------------------------------------------------- [ Data ]
+
+attr : Parser (String, String)
+attr = do
+    n <- ident <$ space
+    colon
+    ty <- ident <$ space
+    pure $ MkPair n ty
+  <?> "Parse Attribute"
+
+simpleDtype : Parser DType
+simpleDtype = do
+    token "data"
+    id <- ident <$ space
+    pure $ MkSType id
+   <?> "Simple Data Type"
+
+complexDtype : Parser DType
+complexDtype = do
+    token "data"
+    id <- ident <$ space
+    body <- braces (commaSep1 (attr <$ space) <$ space)
+    pure $ MkCType id body
+   <?> "Complex Data Type"
+
+dtype : Parser DType
+dtype = complexDtype <|> simpleDtype <?> "Data Types"
+
+-- --------------------------------------------------------------- [ Functions ]
+
+paramfunc : Parser Function
+paramfunc = do
+    id <- ident <$ space
+    colon
+    ps <- some (parens attr <$ token "->")
+    rty <- ident <$ space
+    pure $ MkPFunc id ps rty
+  <?> "Func with parameters"
+
+noparamfunc : Parser Function
+noparamfunc = do
+    id <- ident <$ space
+    colon
+    rty <- ident
+    pure $ MkFunc id rty
+
+funcs : Parser Function
+funcs = paramfunc <|> noparamfunc
+
 -- --------------------------------------------------------------- [ Interface ]
+actual : Parser Interface
+actual = do
+    token "interface"
+    id <- ident <$ space
+    fs <- braces (some (funcs <$ space) <$ space)
+    pure $ Actual id fs
 
 provides : Parser Interface
 provides = do
     token "provides"
     id <- ident <$ space
-    orig <- opt (token "from" $> ident)
+    orig <- (token "from" $> ident)
     space
-    pure $ Provides id orig
+    pure $ Provided id orig
   <?> "Provides"
 
 requires : Parser Interface
@@ -26,7 +83,7 @@ requires = do
     id <- ident <$ space
     token "from"
     orig <- ident <$ space
-    pure $ Requires id orig
+    pure $ Required id orig
    <?> "Requires"
 
 -- --------------------------------------------------------------- [ Component ]
@@ -35,22 +92,25 @@ component : Parser Component
 component = do
     token "component"
     name <- ident <$ space
-    (ps, rs, cs) <- braces (cbody <$ space)
-    pure $ MkComponent name ps rs cs
+    (as, ps, rs, cs) <- braces (cbody <$ space)
+    pure $ MkComponent name ps as rs cs
    <?> "Component"
   where
-    cbody : Parser (Interfaces, Maybe Interfaces, Maybe (List Component))
+    cbody : Parser (Maybe Interfaces, Maybe Interfaces, Maybe Interfaces, Maybe (List Component))
     cbody = do
-      ps <- some (provides <$ space)
+      as <- opt $ some (actual <$ space)
+      ps <- opt $ some (provides <$ space)
       rs <- opt $ some (requires <$ space)
       cs <- opt $ some (component <$ space)
-      pure (ps, rs, cs)
+      pure (as, ps, rs, cs)
 
 -- ----------------------------------------------------------------- [ Diagram ]
 
 componentdiagram : Parser ComponentDiagram
 componentdiagram = do
-    cs <- space $> some (component <$ space)
-    pure cs
+    ds <- some (dtype <$ space)
+    space
+    cs <- some (component <$ space)
+    pure $ MkComponentDiagram ds cs
   <?> "Component Diagram"
 -- --------------------------------------------------------------------- [ EOF ]
