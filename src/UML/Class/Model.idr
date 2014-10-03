@@ -22,7 +22,6 @@ Params : Type
 Params = List Param
 
 -- ----------------------------------------------------------------- [ Methods ]
-
 data Method : Type where
     MkMethod : (id : String)
              -> (retTy : String)

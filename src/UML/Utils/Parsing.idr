@@ -1,4 +1,9 @@
---- Parsing Utils
+-- ------------------------------------------------------------- [ Parsing.idr ]
+-- Module      : UML.Utils.Parsing
+-- Description : Parsing utilities.
+-- Copyright   : (c) Jan de Muijnck-Hughes
+-- License     : see LICENSE
+-- --------------------------------------------------------------------- [ EOH ]
 module UML.Utils.Parsing
 
 import Lightyear.Core
