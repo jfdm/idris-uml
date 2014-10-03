@@ -48,11 +48,12 @@ component Warehouses {
       createOrder : Int
       addToOrder : (p : Product) -> (orderID : Int) -> Bool
       removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
-}
+    }
     interface ManageInventory {
       createOrder : Int
       addToOrder : (p : Product) -> (orderID : Int) -> Bool
       removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
+    }
   }
 }
 
@@ -70,7 +71,7 @@ component WebStore {
       createOrder : Int
       addToOrder : (p : Product) -> (orderID : Int) -> Bool
       removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
-}
+    }
     requires ManageCustomers from Accounting
   }
 
@@ -79,7 +80,7 @@ component WebStore {
       createOrder : Int
       addToOrder : (p : Product) -> (orderID : Int) -> Bool
       removeFromOrder : (p : Product) -> (orderID : Int) -> Bool
-}
+    }
     requires UserSession from Authentication
     requires ManageOrders from Accounting
   }

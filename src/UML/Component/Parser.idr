@@ -10,7 +10,6 @@ import UML.Utils.Parsing
 ident : Parser String
 ident = map pack (some $ satisfy isAlphaNum)
 
-
 -- -------------------------------------------------------------------- [ Data ]
 
 attr : Parser (String, String)
@@ -86,23 +85,23 @@ requires = do
     pure $ Required id orig
    <?> "Requires"
 
+interface : Parser Interface
+interface = provides <|> requires <|> actual <?> "Interface"
 -- --------------------------------------------------------------- [ Component ]
 
 component : Parser Component
 component = do
     token "component"
     name <- ident <$ space
-    (as, ps, rs, cs) <- braces (cbody <$ space)
-    pure $ MkComponent name ps as rs cs
+    (is, cs) <- braces (cbody <$ space)
+    pure $ MkComponent name is cs
    <?> "Component"
   where
-    cbody : Parser (Maybe Interfaces, Maybe Interfaces, Maybe Interfaces, Maybe (List Component))
+    cbody : Parser (Interfaces, Maybe (List Component))
     cbody = do
-      as <- opt $ some (actual <$ space)
-      ps <- opt $ some (provides <$ space)
-      rs <- opt $ some (requires <$ space)
+      is <- some (interface <$ space)
       cs <- opt $ some (component <$ space)
-      pure (as, ps, rs, cs)
+      pure (is, cs)
 
 -- ----------------------------------------------------------------- [ Diagram ]
 

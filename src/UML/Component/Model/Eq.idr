@@ -27,11 +27,9 @@ mutual
   private
   %assert_total
   componentEq : Component -> Component -> Bool
-  componentEq (MkComponent x xps xas xrs xcs) (MkComponent y yps yas yrs ycs) =
+  componentEq (MkComponent x xis xcs) (MkComponent y yis ycs) =
            x == y &&
-           xps == yps &&
-           xas == yas &&
-           xrs == yrs &&
+           xis == yis &&
            xcs == ycs
   componentEq _ _ = False
 

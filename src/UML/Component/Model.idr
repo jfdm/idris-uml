@@ -36,14 +36,10 @@ data Component : Type where
     ||| Constructs a new component.
     |||
     ||| @name The components name.
-    ||| @ps A list of provided interfaces.
-    ||| @as A list of actual interfaces.
-    ||| @rs A list of required interfaces.
+    ||| @is A list of interfaces.
     ||| @cs A list of possible sub components.
     MkComponent : (name : String)
-                -> (ps : Maybe Interfaces)
-                -> (as : Maybe Interfaces)
-                -> (rs : Maybe Interfaces)
+                -> (is : Interfaces)
                 -> (cs : Maybe (List Component))
                 -> Component
 
