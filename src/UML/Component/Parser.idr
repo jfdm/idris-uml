@@ -7,11 +7,9 @@ import Lightyear.Strings
 import UML.Component.Model
 import UML.Utils.Parsing
 
-ident : Parser String
-ident = map pack (some $ satisfy isAlphaNum)
+%access private
 
 -- -------------------------------------------------------------------- [ Data ]
-
 attr : Parser (String, String)
 attr = do
     n <- ident <$ space
@@ -105,6 +103,7 @@ component = do
 
 -- ----------------------------------------------------------------- [ Diagram ]
 
+public
 componentdiagram : Parser ComponentDiagram
 componentdiagram = do
     ds <- some (dtype <$ space)
@@ -112,4 +111,5 @@ componentdiagram = do
     cs <- some (component <$ space)
     pure $ MkComponentDiagram ds cs
   <?> "Component Diagram"
+
 -- --------------------------------------------------------------------- [ EOF ]

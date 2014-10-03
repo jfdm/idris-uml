@@ -11,16 +11,9 @@ import Lightyear.Combinators
 import Lightyear.Strings
 
 import UML.Sequence.Model
+import UML.Utils.Parsing
 
 %access private
-
-||| Parser Identifiers
-ident : Parser String
-ident = map pack (some $ satisfy isAlphaNum)
-
-||| End of line
-eol : Parser ()
-eol = char '\n'
 
 ||| Parse a single step.
 step : Parser MessageStep

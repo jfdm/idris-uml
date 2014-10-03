@@ -11,22 +11,9 @@ import Lightyear.Combinators
 import Lightyear.Strings
 
 import UML.Deployment.Model
+import UML.Utils.Parsing
 
-%access public
-
-||| Identifiers
-ident : Parser String
-ident = map pack (some $ satisfy isAlphaNum)
-
-||| Parser stuff between given character.
-|||
-||| @c The deliminator.
-literallyBetween : (c : Char) -> Parser String
-literallyBetween c = map pack $ between (char c) (char c) (some (satisfy (/= c)))
-
-||| End of line character.
-eol : Parser ()
-eol = char '\n'
+%access private
 
 -- -------------------------------------------------------------------- [ Misc ]
 ||| Parse a key-value pair.

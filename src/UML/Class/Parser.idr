@@ -6,17 +6,9 @@ import Lightyear.Strings
 
 import UML.Class.Model
 
+import UML.Utils.Parsing
+
 %access private
-
-ident : Parser String
-ident = map pack (some $ satisfy isAlphaNum)
-
-literallyBetween : Char -> Parser String
-literallyBetween c = map pack $ between (char c) (char c) (some (satisfy (/= c)))
-
-eol : Parser ()
-eol = char '\n'
-
 -- -------------------------------------------------------------------- [ Misc ]
 modifier : Parser Modifier
 modifier = do token "static"
@@ -37,7 +29,6 @@ visibility = do token "-"
          <?> "Visibility"
 
 -- ---------------------------------------------------------------- [ Relation ]
--- relation : Parser Relation
 description : Parser String
 description = do
     colon
@@ -166,3 +157,4 @@ classdiagram = do
     rs <- some (relation <$ space)
     pure $ MkClassDiagram cs rs
   <?> "Class Diagram"
+-- --------------------------------------------------------------------- [ EOF ]
