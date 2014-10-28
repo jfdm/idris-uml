@@ -1,4 +1,12 @@
+-- --------------------------------------------------------------- [ Model.idr ]
+-- Module      : UML.Deployment.Model
+-- Description : Model for textual UML deployment diagrams.
+-- Copyright   : (c) Jan de Muijnck-Hughes
+-- License     : see LICENSE
+-- --------------------------------------------------------------------- [ EOH ]
 module UML.Deployment.Model
+
+%access public
 
 ||| The different types of device type supported.
 data DeviceTy = GenericDev | Server | Workstation | Mobile | Embedded
@@ -110,4 +118,99 @@ data DeploymentDiagram : Type where
   MkDeployment : (ds : Devices)
                -> (rs : Relations)
                -> DeploymentDiagram
+
+-- ---------------------------------------------------------------------- [ Eq ]
+
+instance Eq DeviceTy where
+  (==) GenericDev   GenericDev  = True
+  (==) Server       Server      = True
+  (==) Workstation  Workstation = True
+  (==) Mobile       Mobile      = True
+  (==) Embedded     Embedded    = True
+  (==) _            _           = False
+
+instance Eq EnvTy where
+  (==) OS         OS        = True
+  (==) Engine     Engine    = True
+  (==) Container  Container = True
+  (==) AppServer  AppServer = True
+  (==) App        App       = True
+  (==) _          _         = False
+
+instance Eq ArtifactTy where
+  (==) Document     Document   = True
+  (==) Source       Source     = True
+  (==) Library      Library    = True
+  (==) Executable   Executable = True
+  (==) Script       Script     = True
+  (==) _            _          = False
+
+instance Eq Specification where
+  (==) (MkSpec x xs) (MkSpec y ys) = x == y && xs == ys
+
+instance Eq Artifact where
+  (==) (MkArtifact xTy x xs) (MkArtifact yTy y ys) = xTy == yTy && x == y && xs == ys
+
+instance Eq Env where
+  (==) (MkEnv xTy x xs xxs) (MkEnv yTy y ys yys) = xTy == yTy && x == y && xs == ys && xxs == yys
+
+instance Eq Device where
+  (==) (MkDevice xTy x xs xxs) (MkDevice yTy y ys yys) = xTy == yTy && x == y && xs == ys && xxs == yys
+
+instance Eq Relation where
+  (==) (MkRelation xa xb xp) (MkRelation ya yb yp) =
+       xa == ya && xb == yb && xp == yp
+  (==) _                      _                    = False
+
+instance Eq DeploymentDiagram where
+  (==) (MkDeployment xds xrs) (MkDeployment yds yrs) =
+       xds == yds && xrs == yrs
+
+-- -------------------------------------------------------------------- [ Show ]
+
+instance Show DeviceTy where
+  show GenericDev  = "Generic"
+  show Server      = "Server"
+  show Workstation = "Workstation"
+  show Mobile      = "Mobile"
+  show Embedded    = "Embedded"
+
+instance Show EnvTy where
+  show OS        = "OS"
+  show Engine    = "Engine"
+  show Container = "Container"
+  show AppServer = "AppServer"
+  show App       = "App"
+
+instance Show ArtifactTy where
+  show Document   = "Document"
+  show Source     = "Source"
+  show Library    = "Library"
+  show Executable = "Executable"
+  show Script     = "Script"
+
+instance Show Specification where
+  show (MkSpec id as) = unwords
+       ["[Specification", show id, show as, "]"]
+
+instance Show Artifact where
+  show (MkArtifact ty id spec) = unwords
+       ["[Artifact", show ty, show id, show spec, "]"]
+
+instance Show Env where
+  show (MkEnv ty id as ps) = unwords
+       ["[Env", show ty, show id, show as, show ps, "]"]
+
+instance Show Device where
+  show (MkDevice ty id es as) = unwords
+       ["[Device", show ty, show id, show es, show as, "]"]
+
+instance Show Relation where
+  show (MkRelation xID yID proto) = unwords
+       ["[Relation", show xID, show yID, show proto, "]"]
+
+instance Show DeploymentDiagram where
+  show (MkDeployment ds rs) = unwords
+       ["[DeployDia", show ds, show rs, "]"]
+
 -- --------------------------------------------------------------------- [ EOF ]

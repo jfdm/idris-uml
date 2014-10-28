@@ -1,3 +1,9 @@
+-- -------------------------------------------------------------- [ Parser.idr ]
+-- Module      : UML.Class.Parser
+-- Description :
+-- Copyright   : (c) Jan de Muijnck-Hughes
+-- License     : see LICENSE
+-- --------------------------------------------------------------------- [ EOH ]
 module UML.Class.Parser
 
 import Lightyear.Core

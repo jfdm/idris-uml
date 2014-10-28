@@ -6,6 +6,8 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Sequence.Model
 
+%access public
+
 ||| A step in a sequence diagram.
 data MessageStep : Type where
     ||| Construct a step.
@@ -18,4 +20,16 @@ data MessageStep : Type where
 ||| A diagram is a list of steps.
 SequenceDiagram : Type
 SequenceDiagram = List MessageStep
+
+-- ---------------------------------------------------------------------- [ Eq ]
+
+instance Eq MessageStep where
+  (==) (MkStep fx tx xs) (MkStep fy ty ys) = fx == fy && tx == ty && xs == ys
+
+-- -------------------------------------------------------------------- [ Show ]
+
+instance Show MessageStep where
+  show (MkStep f t ms) = unwords
+       [show f, "->", show t, "[", show ms, "]"]
+
 -- --------------------------------------------------------------------- [ EOF ]

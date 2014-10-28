@@ -1,6 +1,6 @@
 package uml
 
-opts = "-p lightyear -p effects"
+opts = "-p lightyear -p effects --no-partial-eval"
 
 sourcedir = src
 
@@ -8,26 +8,18 @@ modules = UML
 
         , UML.Class
         , UML.Class.Model
-        , UML.Class.Model.Show
-        , UML.Class.Model.Eq
         , UML.Class.Parser
 
         , UML.Sequence
         , UML.Sequence.Model
-        , UML.Sequence.Model.Show
-        , UML.Sequence.Model.Eq
         , UML.Sequence.Parser
 
         , UML.Deployment
         , UML.Deployment.Model
-        , UML.Deployment.Model.Show
-        , UML.Deployment.Model.Eq
         , UML.Deployment.Parser
 
         , UML.Component
         , UML.Component.Model
-        , UML.Component.Model.Show
-        , UML.Component.Model.Eq
         , UML.Component.Parser
 
         , UML.Utils.Readfile

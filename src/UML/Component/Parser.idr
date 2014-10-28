@@ -1,3 +1,9 @@
+-- -------------------------------------------------------------- [ Parser.idr ]
+-- Module      : UML.Component.Parser
+-- Description :
+-- Copyright   : (c) Jan de Muijnck-Hughes
+-- License     : see LICENSE
+-- --------------------------------------------------------------------- [ EOH ]
 module UML.Component.Parser
 
 import Lightyear.Core
@@ -6,8 +12,6 @@ import Lightyear.Strings
 
 import UML.Component.Model
 import UML.Utils.Parsing
-
-%access private
 
 -- -------------------------------------------------------------------- [ Data ]
 attr : Parser (String, String)

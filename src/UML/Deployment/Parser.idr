@@ -14,7 +14,6 @@ import UML.Deployment.Model
 import UML.Utils.Parsing
 
 %access private
-
 -- -------------------------------------------------------------------- [ Misc ]
 ||| Parse a key-value pair.
 |||

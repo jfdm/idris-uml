@@ -6,6 +6,8 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Effs
 
+%access public
+
 import Effects
 import Effect.StdIO
 import Effect.System

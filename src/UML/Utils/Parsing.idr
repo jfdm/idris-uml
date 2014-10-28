@@ -10,6 +10,8 @@ import Lightyear.Core
 import Lightyear.Combinators
 import Lightyear.Strings
 
+%access public
+
 ||| An identifier parser.
 |||
 ||| Identifiers must satisfy the form:
