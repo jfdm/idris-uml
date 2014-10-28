@@ -6,13 +6,13 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Effs
 
-%access public
-
 import Effects
 import Effect.StdIO
 import Effect.System
 import Effect.Exception
 import Effect.File
+
+%access public
 
 ||| Global list of effects.
 UMLEffs : List EFFECT

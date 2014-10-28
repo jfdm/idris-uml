@@ -1,3 +1,9 @@
+-- ---------------------------------------------------------------- [ Main.idr ]
+-- Module      : Main
+-- Description : Example use of the UML library
+-- Copyright   : (c) Jan de Muijnck-Hughes
+-- License     : see LICENSE
+-- --------------------------------------------------------------------- [ EOH ]
 module Main
 
 import UML
@@ -42,9 +48,7 @@ umlMain = do
     case modelTy opts of
       Flag.Clazz      => putStrLn $ show !(doParse classdiagram src)
       Flag.Sequence   => putStrLn $ show !(doParse sequencediagram src)
-      Flag.Deployment => do
-        m <- doParse deploymentdiagram src
-        putStrLn $ show m
+      Flag.Deployment => putStrLn $ show !(doParse deploymentdiagram src)
       Flag.Component  => putStrLn $ show !(doParse componentdiagram src)
 
 main : IO ()
