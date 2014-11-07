@@ -5,7 +5,7 @@ LIB   := uml
 BIN   := ${LIB}bin
 OPTS  :=
 
-.PHONY: clean build
+.PHONY: clean lib
 
 exe: lib
 	${IDRIS} ${OPTS} --build ${BIN}.ipkg
@@ -29,7 +29,7 @@ clobber : clean
 
 test :
 	echo "Not yet, tests are old and broken."
-	#(cd tests; bash runtests.sh)
+	 #(cd tests; bash runtests.sh)
 
 doc:
 	${IDRIS} --mkdoc ${LIB}.ipkg

@@ -4,7 +4,7 @@
 -- Copyright   : (c) Jan de Muijnck-Hughes
 -- License     : see LICENSE
 -- --------------------------------------------------------------------- [ EOH ]
-module UML.Code.Parser
+module UML.Component.Parser
 
 import Lightyear.Core
 import Lightyear.Combinators
