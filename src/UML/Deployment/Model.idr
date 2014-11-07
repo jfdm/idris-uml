@@ -110,14 +110,14 @@ Relations : Type
 Relations = List Relation
 
 ||| A model for UML Deployment Diagrams.
-data DeploymentDiagram : Type where
+data DeploymentModel : Type where
   ||| Construct a Deployment Diagram
   |||
   ||| @ds The physical devices.
   ||| @rs The relations between the devices.
   MkDeployment : (ds : Devices)
                -> (rs : Relations)
-               -> DeploymentDiagram
+               -> DeploymentModel
 
 -- ---------------------------------------------------------------------- [ Eq ]
 
@@ -162,7 +162,7 @@ instance Eq Relation where
        xa == ya && xb == yb && xp == yp
   (==) _                      _                    = False
 
-instance Eq DeploymentDiagram where
+instance Eq DeploymentModel where
   (==) (MkDeployment xds xrs) (MkDeployment yds yrs) =
        xds == yds && xrs == yrs
 
@@ -209,8 +209,8 @@ instance Show Relation where
   show (MkRelation xID yID proto) = unwords
        ["[Relation", show xID, show yID, show proto, "]"]
 
-instance Show DeploymentDiagram where
+instance Show DeploymentModel where
   show (MkDeployment ds rs) = unwords
-       ["[DeployDia", show ds, show rs, "]"]
+       ["[DeployModel", show ds, show rs, "]"]
 
 -- --------------------------------------------------------------------- [ EOF ]

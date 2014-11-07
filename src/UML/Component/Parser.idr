@@ -64,12 +64,12 @@ component = do
 -- ----------------------------------------------------------------- [ Diagram ]
 
 public
-componentdiagram : Parser ComponentDiagram
-componentdiagram = do
+componentModel : Parser ComponentModel
+componentModel = do
     ds <- some (dtype <$ space)
     space
     cs <- some (component <$ space)
-    pure $ MkComponentDiagram ds cs
-  <?> "Component Diagram"
+    pure $ MkComponentModel ds cs
+  <?> "Component Model"
 
 -- --------------------------------------------------------------------- [ EOF ]

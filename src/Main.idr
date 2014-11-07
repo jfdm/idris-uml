@@ -46,11 +46,12 @@ umlMain = do
     opts <- (processArgs args)
     src <- readFile (fname opts)
     case modelTy opts of
-      Flag.Clazz      => putStrLn $ show !(doParse classdiagram src)
-      Flag.Sequence   => putStrLn $ show !(doParse sequencediagram src)
-      Flag.Deployment => putStrLn $ show !(doParse deploymentdiagram src)
-      Flag.Component  => putStrLn $ show !(doParse componentdiagram src)
+      Flag.Clazz      => putStrLn $ show !(doParse classModel src)
+      Flag.Sequence   => putStrLn $ show !(doParse sequenceModel src)
+      Flag.Deployment => putStrLn $ show !(doParse deploymentModel src)
+      Flag.Component  => putStrLn $ show !(doParse componentModel src)
 
 main : IO ()
 main = run umlMain
+
 -- --------------------------------------------------------------------- [ EOF ]

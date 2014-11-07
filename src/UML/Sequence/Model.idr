@@ -18,8 +18,8 @@ data MessageStep : Type where
     MkStep : (from : String) -> (to : String) -> (ms : List String) -> MessageStep
 
 ||| A diagram is a list of steps.
-SequenceDiagram : Type
-SequenceDiagram = List MessageStep
+SequenceModel : Type
+SequenceModel = List MessageStep
 
 -- ---------------------------------------------------------------------- [ Eq ]
 

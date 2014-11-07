@@ -149,10 +149,10 @@ device = do
       pure (es, ps)
 
 public
-deploymentdiagram : Parser DeploymentDiagram
-deploymentdiagram = do
+deploymentModel : Parser DeploymentModel
+deploymentModel = do
     ds <- some (device <$ space)
     rs <- some (relation <$ space)
     pure $ MkDeployment ds rs
-  <?> "Deployment Diagram"
+  <?> "Deployment Model"
 -- --------------------------------------------------------------------- [ EOF ]

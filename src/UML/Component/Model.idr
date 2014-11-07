@@ -38,10 +38,10 @@ Components : Type
 Components = List Component
 
 ||| A Component diagram is just a list of components.
-data ComponentDiagram : Type where
-    MkComponentDiagram : (ds : DTypes)
+data ComponentModel : Type where
+    MkComponentModel : (ds : DTypes)
                        -> (cs : Components)
-                       -> ComponentDiagram
+                       -> ComponentModel
 
 -- ------------------------------------------------------------------ [ Equals ]
 
@@ -61,11 +61,11 @@ mutual
 
 mutual
   %assert_total
-  componentDiaEq : ComponentDiagram -> ComponentDiagram -> Bool
-  componentDiaEq (MkComponentDiagram xd xc) (MkComponentDiagram yd yc) = xd == yd && xc == yc
+  componentModelEq : ComponentModel -> ComponentModel -> Bool
+  componentModelEq (MkComponentModel xd xc) (MkComponentModel yd yc) = xd == yd && xc == yc
 
-  instance Eq ComponentDiagram where
-      (==) = componentDiaEq
+  instance Eq ComponentModel where
+      (==) = componentModelEq
 
 
 -- -------------------------------------------------------------------- [ Show ]
@@ -81,9 +81,9 @@ instance Show Component where
          show is, "\n\t",
          show cs,"]\n"]
 
-instance Show ComponentDiagram where
-   show (MkComponentDiagram ds cs) = unwords
-        ["[CompDiagram", "\n",
+instance Show ComponentModel where
+   show (MkComponentModel ds cs) = unwords
+        ["[CompModel", "\n",
         show ds, "\n",
         show cs, "\n]"]
 

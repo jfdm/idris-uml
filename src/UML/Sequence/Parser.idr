@@ -29,9 +29,9 @@ step = do
 
 ||| Parse a sequence diagram, a series of steps.
 public
-sequencediagram : Parser SequenceDiagram
-sequencediagram = do
+sequenceModel : Parser SequenceModel
+sequenceModel = do
     ss <- space $> some (step <$ space)
     pure ss
-  <?> "Sequence Diagram"
+  <?> "Sequence Model"
 -- --------------------------------------------------------------------- [ EOF ]

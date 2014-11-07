@@ -157,10 +157,10 @@ clazz = bodyClass <|> emptyClass <?> "Class"
 -- ----------------------------------------------------------- [ Class Diagram ]
 
 public
-classdiagram : Parser ClassDiagram
-classdiagram = do
+classModel : Parser ClassModel
+classModel = do
     cs <- some (clazz <$ space)
     rs <- some (relation <$ space)
-    pure $ MkClassDiagram cs rs
+    pure $ MkClassModel cs rs
   <?> "Class Diagram"
 -- --------------------------------------------------------------------- [ EOF ]

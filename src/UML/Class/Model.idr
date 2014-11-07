@@ -4,7 +4,7 @@
 -- Copyright   : (c) Jan de Muijnck-Hughes
 -- License     : see LICENSE
 -- --------------------------------------------------------------------- [ EOH ]
-module UML.ClassDiagram.Model
+module UML.Class.Model
 
 data Modifier = Abstract | Static
 data Visibility = Private | Protected | Package | Public
@@ -71,10 +71,10 @@ data Relation : Type where
 Relations : Type
 Relations = List Relation
 
--- ------------------------------------------------------------ [ ClassDiagram ]
+-- ------------------------------------------------------------ [ ClassModel ]
 
-data ClassDiagram : Type where
-    MkClassDiagram : Classes -> Relations -> ClassDiagram
+data ClassModel : Type where
+    MkClassModel : Classes -> Relations -> ClassModel
 
 
 -- ---------------------------------------------------------------------- [ Eq ]
@@ -124,8 +124,8 @@ instance Eq Relation where
     (==) (MkRelation xty xa xb xs) (MkRelation yty ya yb ys) =
          xty == yty && xa == ya && xb == yb && xs == ys
 
-instance Eq ClassDiagram where
-    (==) (MkClassDiagram xcs xrs) (MkClassDiagram ycs yrs) =
+instance Eq ClassModel where
+    (==) (MkClassModel xcs xrs) (MkClassModel ycs yrs) =
          xcs == ycs && yrs == xrs
 
 -- -------------------------------------------------------------------- [ Show ]
@@ -171,8 +171,8 @@ instance Show Relation where
     show (MkRelation ty a b desc) = unwords
          ["[Relation", "(", show a, "->", show b, ")", ":", show ty, show desc, "]"]
 
-instance Show ClassDiagram where
-    show (MkClassDiagram cs rs) = unwords
+instance Show ClassModel where
+    show (MkClassModel cs rs) = unwords
          ["[Class", show cs, show rs, "]"]
 
 -- --------------------------------------------------------------------- [ EOF ]
