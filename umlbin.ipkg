@@ -6,4 +6,4 @@ modules = Main
 
 main = Main
 sourcedir = src
-executable = a.out
+executable = uml.bin

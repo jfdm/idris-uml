@@ -158,13 +158,10 @@ instance Eq Device where
   (==) (MkDevice xTy x xs xxs) (MkDevice yTy y ys yys) = xTy == yTy && x == y && xs == ys && xxs == yys
 
 instance Eq Relation where
-  (==) (MkRelation xa xb xp) (MkRelation ya yb yp) =
-       xa == ya && xb == yb && xp == yp
-  (==) _                      _                    = False
+  (==) (MkRelation xa xb xp) (MkRelation ya yb yp) = xa == ya && xb == yb && xp == yp
 
 instance Eq DeploymentModel where
-  (==) (MkDeployment xds xrs) (MkDeployment yds yrs) =
-       xds == yds && xrs == yrs
+  (==) (MkDeployment xds xrs) (MkDeployment yds yrs) = xds == yds && xrs == yrs
 
 -- -------------------------------------------------------------------- [ Show ]
 
@@ -206,8 +203,7 @@ instance Show Device where
        ["[Device", show ty, show id, show es, show as, "]"]
 
 instance Show Relation where
-  show (MkRelation xID yID proto) = unwords
-       ["[Relation", show xID, show yID, show proto, "]"]
+  show (MkRelation xID yID proto) = "[Relation " ++ xID ++ " " ++ yID ++ " " ++ proto ++ "]"
 
 instance Show DeploymentModel where
   show (MkDeployment ds rs) = unwords

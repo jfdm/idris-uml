@@ -42,7 +42,7 @@ device server documents {
     }
 }
 
-device server dbserver {
+device server dbServer {
     env engine dbms {
         artifact doc schemaproduct
         artifact doc schemapolicy
@@ -70,7 +70,7 @@ presentation commsWith policy via http
 policy commsWith uWriteRating via http
 policy commsWith dirServer via http
 policy commsWith dbServer via http
-policy commsWith docServer via http
+policy commsWith documents via http
 dbServer commsWith product via http
-product commsWith docServer via http
+product commsWith documents via http
 user commsWith product via http

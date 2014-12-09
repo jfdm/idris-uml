@@ -20,7 +20,7 @@ DTypes = List DType
 data Function : Type where
     ||| Constructs a new function.
     MkPFunc : (name : String)
-            -> (ps : List (String, String))
+            -> (ps : List (Pair String String))
             -> (retTy : String) -> Function
     MkFunc : (name : String)
            -> (rety : String)

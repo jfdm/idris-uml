@@ -65,16 +65,16 @@ Classes = List Class
 
 -- --------------------------------------------------------------- [ Relations ]
 
-data Relation : Type where
-    MkRelation : RelationTy -> String -> String -> Maybe String -> Relation
+data ClassRelation : Type where
+    MkClassRelation : RelationTy -> String -> String -> Maybe String -> ClassRelation
 
-Relations : Type
-Relations = List Relation
+CRelations : Type
+CRelations = List ClassRelation
 
 -- ------------------------------------------------------------ [ ClassModel ]
 
 data ClassModel : Type where
-    MkClassModel : Classes -> Relations -> ClassModel
+    MkClassModel : Classes -> CRelations -> ClassModel
 
 
 -- ---------------------------------------------------------------------- [ Eq ]
@@ -118,10 +118,10 @@ instance Eq Attribute where
 
 instance Eq Class where
     (==) (MkClass x xty xas xms) (MkClass y yty yas yms) =
-         x == y && xty == yty && xas == yas && xms == yms
+        x == y && xty == yty && xas == yas && xms == yms
 
-instance Eq Relation where
-    (==) (MkRelation xty xa xb xs) (MkRelation yty ya yb ys) =
+instance Eq ClassRelation where
+    (==) (MkClassRelation xty xa xb xs) (MkClassRelation yty ya yb ys) =
          xty == yty && xa == ya && xb == yb && xs == ys
 
 instance Eq ClassModel where
@@ -167,9 +167,9 @@ instance Show Class where
     show (MkClass id ty as ms) = unwords
          ["[Class", id, ":", show ty, show as, show ms, "]"]
 
-instance Show Relation where
-    show (MkRelation ty a b desc) = unwords
-         ["[Relation", "(", show a, "->", show b, ")", ":", show ty, show desc, "]"]
+instance Show ClassRelation where
+    show (MkClassRelation ty a b desc) = unwords
+         ["[ClassRelation", "(", show a, "->", show b, ")", ":", show ty, show desc, "]"]
 
 instance Show ClassModel where
     show (MkClassModel cs rs) = unwords

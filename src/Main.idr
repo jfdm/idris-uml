@@ -38,7 +38,8 @@ doParse p src  = case parse p src of
     Left err    => do
       putStrLn $ err
       raise "Oops"
-    Right model => pure model
+    Right model => do
+      pure model
 
 umlMain : {UMLEffs} Eff ()
 umlMain = do

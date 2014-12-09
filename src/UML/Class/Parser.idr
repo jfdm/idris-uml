@@ -54,13 +54,13 @@ relationType = do token "<|--"
                   pure Association
            <?> "Relation Type"
 
-relation : Parser Relation
+relation : Parser ClassRelation
 relation = do
     f <- ident <$ space
     relTy <- relationType
     t <- ident <$ space
     desc <- opt description
-    pure $ MkRelation relTy f t desc
+    pure $ MkClassRelation relTy f t desc
 
 -- ------------------------------------------------------------------ [ Params ]
 
