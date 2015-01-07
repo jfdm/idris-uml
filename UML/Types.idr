@@ -8,10 +8,10 @@ import UML.Component.Model
 data UMLTy = CLAZZ | SEQUENCE | DEPLOYMENT | COMPONENT
 
 data UML : Type where
-  Class      : ClassModel      -> UML
-  Component  : ComponentModel  -> UML
-  Sequence   : SequenceModel   -> UML
-  Deployment : DeploymentModel -> UML
+  Class      : ClassModel MODEL -> UML
+  Component  : ComponentModel   -> UML
+  Sequence   : SequenceModel    -> UML
+  Deployment : DeploymentModel  -> UML
 
 
 instance Show UMLTy where

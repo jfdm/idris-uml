@@ -54,30 +54,30 @@ relationType = do token "<|--"
                   pure Association
            <?> "Relation Type"
 
-relation : Parser ClassRelation
+relation : Parser $ ClassModel RELA
 relation = do
     f <- ident <$ space
     relTy <- relationType
     t <- ident <$ space
     desc <- opt description
-    pure $ MkClassRelation relTy f t desc
+    pure $ Relation relTy f t desc
 
 -- ------------------------------------------------------------------ [ Params ]
 
-param : Parser Param
+param : Parser $ ClassModel PARAM
 param = do
     id <- ident <$ space
     colon
     ty <- ident <$ space
-    pure $ MkParam id ty
+    pure $ Param id ty
   <?> "Param"
 
-params : Parser Params
+params : Parser $ List $ ClassModel PARAM
 params = sepBy1 param comma <?> "Params"
 
 -- ----------------------------------------------------------------- [ Methods ]
 
-method : Parser Method
+method : Parser $ ClassModel METHOD
 method = do
     mod <- opt $ braces modifier
     vis <- visibility
@@ -85,19 +85,19 @@ method = do
     ps  <- parens $ opt params
     colon
     ty <- ident
-    pure $ MkMethod id ty mod vis ps
+    pure $ Method id ty mod vis $ fromMaybe Nil ps
   <?> "Method"
 
 -- -------------------------------------------------------------- [ Attributes ]
 
-attribute : Parser Attribute
+attribute : Parser $ ClassModel ATTR
 attribute = do
     mod <- opt $ braces modifier
     vis <- visibility
     id  <- ident <$ space
     colon
     ty  <- ident
-    pure $ MkAttribute id ty mod vis
+    pure $ Attribute id ty mod vis
   <?> "Attribute"
 
 -- ------------------------------------------------------------------- [ Class ]
@@ -121,15 +121,15 @@ classDecl = do
   <?> "Class Delcaration"
 
 
-emptyClass : Parser Class
+emptyClass : Parser $ ClassModel CLASS
 emptyClass = do
     (ty,id) <- classDecl
-    let c = MkClass id ty Nothing Nothing
+    let c = Clazz id ty Nil Nil
     pure c
   <?> "Empty Class"
 
 
-element : Parser (Maybe Attribute, Maybe Method)
+element : Parser (Maybe $ ClassModel ATTR, Maybe $ ClassModel METHOD)
 element = do a <- attribute
              eol
              pure (Just a, Nothing)
@@ -138,20 +138,20 @@ element = do a <- attribute
              pure (Nothing, Just m)
       <?> "Element"
 
-classBody : Parser (Attributes, Methods)
+classBody : Parser (List $ ClassModel ATTR, List $ ClassModel METHOD)
 classBody = do
     es <- some element
     let (as', ms') = unzip es
     pure (catMaybes as', catMaybes ms')
 
-bodyClass : Parser Class
+bodyClass : Parser $ ClassModel CLASS
 bodyClass = do
     (ty, id) <- classDecl
     (as, ms) <- braces classBody
-    let c = MkClass id ty (Just as) (Just ms)
+    let c = Clazz id ty as ms
     pure c
 
-clazz : Parser Class
+clazz : Parser $ ClassModel CLASS
 clazz = bodyClass <|> emptyClass <?> "Class"
 
 -- ----------------------------------------------------------- [ Class Diagram ]

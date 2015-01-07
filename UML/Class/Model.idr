@@ -11,62 +11,34 @@ data Visibility = Private | Protected | Package | Public
 data RelationTy = Specialisation | Aggregation | Composition | Association | Realisation
 data ClassTy = ClassAbstract | ClassStandard | ClassInterface
 
--- ----------------------------------------------------------------- [ Methods ]
+-- ------------------------------------------------------------------- [ Model ]
 
-data Param : Type where
-    MkParam : (id : String) -> (ty : String) -> Param
+data ElemTy = PARAM | METHOD | ATTR | CLASS | RELA | MODEL
 
-Params : Type
-Params = List Param
-
--- ----------------------------------------------------------------- [ Methods ]
-data Method : Type where
-    MkMethod : (id : String)
-             -> (retTy : String)
-             -> Maybe Modifier
-             -> Visibility
-             -> Maybe Params
-             -> Method
-
-Methods : Type
-Methods = List Method
-
--- -------------------------------------------------------------- [ Attributes ]
-
-data Attribute : Type where
-    MkAttribute : (id : String)
-                -> (type : String)
-                -> Maybe Modifier
-                -> Visibility
-                -> Attribute
-
-Attributes : Type
-Attributes = List Attribute
-
--- ----------------------------------------------------------------- [ Classes ]
-
-data Class : Type where
-    MkClass : (id : String)
-            -> (ty : ClassTy)
-            -> Maybe Attributes
-            -> Maybe Methods
-            -> Class
-
-Classes : Type
-Classes = List Class
-
--- --------------------------------------------------------------- [ Relations ]
-
-data ClassRelation : Type where
-    MkClassRelation : RelationTy -> String -> String -> Maybe String -> ClassRelation
-
-CRelations : Type
-CRelations = List ClassRelation
-
--- ------------------------------------------------------------ [ ClassModel ]
-
-data ClassModel : Type where
-    MkClassModel : Classes -> CRelations -> ClassModel
+data ClassModel : ElemTy -> Type where
+  Param : String -> String -> ClassModel PARAM
+  Method : String
+         -> String
+         -> Maybe Modifier
+         -> Visibility
+         -> List (ClassModel PARAM)
+         -> ClassModel METHOD
+  Attribute : String
+            -> String
+            -> Maybe Modifier
+            -> Visibility
+            -> ClassModel ATTR
+  Clazz : String
+        -> ClassTy
+        -> List (ClassModel ATTR)
+        -> List (ClassModel METHOD)
+        -> ClassModel CLASS
+  Relation : RelationTy
+           -> String
+           -> String
+           -> Maybe String
+           -> ClassModel RELA
+  MkClassModel : List (ClassModel CLASS) -> List (ClassModel RELA) -> ClassModel MODEL
 
 -- ---------------------------------------------------------------------- [ Eq ]
 
@@ -96,28 +68,29 @@ instance Eq ClassTy where
     (==) ClassInterface ClassInterface = True
     (==) _              _              = False
 
-instance Eq Param where
-    (==) (MkParam x xty) (MkParam y yty) = x == y && xty == yty
+instance Eq ElemTy where
+    (==) PARAM  PARAM  = True
+    (==) METHOD METHOD = True
+    (==) ATTR   ATTR   = True
+    (==) CLASS  CLASS  = True
+    (==) RELA   RELA   = True
+    (==) MODEL  MODEL  = True
+    (==) _      _      = False
 
-instance Eq Method where
-    (==) (MkMethod x xrTy xm xv xs) (MkMethod y yrTy ym yv ys) =
-         x == y && xrTy == yrTy && xm == ym && xv == yv && xs == ys
 
-instance Eq Attribute where
-    (==) (MkAttribute x xty xm xv) (MkAttribute y yty ym yv) =
-         x == y && xty == yty && xm == ym && xv == yv
+mutual
+  %assert_total
+  eqClassModel : ClassModel a -> ClassModel a -> Bool
+  eqClassModel (Param x xty)            (Param y yty)            = x == y && xty == yty
+  eqClassModel (Method x xrTy xm xv xs) (Method y yrTy ym yv ys) = x == y && xrTy == yrTy && xm == ym && xv == yv && xs == ys
+  eqClassModel (Attribute x xty xm xv)  (Attribute y yty ym yv)  = x == y && xty == yty && xm == ym && xv == yv
+  eqClassModel (Clazz x xty xas xms)    (Clazz y yty yas yms)    = x == y && xty == yty && xas == yas && xms == yms
+  eqClassModel (Relation xty xa xb xs)  (Relation yty ya yb ys)  = xty == yty && xa == ya && xb == yb && xs == ys
+  eqClassModel (MkClassModel xcs xrs)   (MkClassModel ycs yrs)   = xcs == ycs && yrs == xrs
+  eqClassModel _                        _                        = False
 
-instance Eq Class where
-    (==) (MkClass x xty xas xms) (MkClass y yty yas yms) =
-        x == y && xty == yty && xas == yas && xms == yms
-
-instance Eq ClassRelation where
-    (==) (MkClassRelation xty xa xb xs) (MkClassRelation yty ya yb ys) =
-         xty == yty && xa == ya && xb == yb && xs == ys
-
-instance Eq ClassModel where
-    (==) (MkClassModel xcs xrs) (MkClassModel ycs yrs) =
-         xcs == ycs && yrs == xrs
+  instance Eq (ClassModel x) where
+      (==) = eqClassModel
 
 -- -------------------------------------------------------------------- [ Show ]
 
@@ -143,27 +116,20 @@ instance Show ClassTy where
     show ClassStandard  = "ClassStandard"
     show ClassInterface = "ClassInterface"
 
-instance Show Param where
-    show (MkParam id ty) = "[Param " ++ id ++ " : " ++ ty ++ "]"
+instance Show ElemTy where
+    show PARAM  = "PARAM"
+    show METHOD = "METHOD"
+    show ATTR   = "ATTR"
+    show CLASS  = "CLASS"
+    show RELA   = "RELA"
+    show MODEL  = "MODEL"
 
-instance Show Method where
-    show (MkMethod id rTy m v ps) = unwords
-         ["[Method", id, ":", rTy, show m, show v, show ps, "]"]
-
-instance Show Attribute where
-    show (MkAttribute id ty m v) = unwords
-         ["[Attribute", id, ":", ty, show m, show v, "]"]
-
-instance Show Class where
-    show (MkClass id ty as ms) = unwords
-         ["[Class", id, ":", show ty, show as, show ms, "]"]
-
-instance Show ClassRelation where
-    show (MkClassRelation ty a b desc) = unwords
-         ["[ClassRelation", "(", show a, "->", show b, ")", ":", show ty, show desc, "]"]
-
-instance Show ClassModel where
-    show (MkClassModel cs rs) = unwords
-         ["[Class", show cs, show rs, "]"]
+instance Show (ClassModel x) where
+    show (Param id ty)          = "[Param " ++ id ++ " : " ++ ty ++ "]"
+    show (Method id rTy m v ps) = unwords ["[Method", id, ":", rTy, show m, show v, show ps, "]"]
+    show (Attribute id ty m v)  = unwords ["[Attribute", id, ":", ty, show m, show v, "]"]
+    show (Clazz id ty as ms)    = unwords ["[Class", id, ":", show ty, show as, show ms, "]"]
+    show (Relation ty a b desc) = unwords ["[Relation", "(", show a, "->", show b, ")", ":", show ty, show desc, "]"]
+    show (MkClassModel cs rs)   = unwords ["[Class", show cs, show rs, "]"]
 
 -- --------------------------------------------------------------------- [ EOF ]
