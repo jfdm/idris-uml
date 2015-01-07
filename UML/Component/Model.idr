@@ -31,7 +31,7 @@ data Component : Type where
     ||| @cs A list of possible sub components.
     MkComponent : (name : String)
                 -> (is : Interfaces)
-                -> (cs : Maybe (List Component))
+                -> (cs : List Component)
                 -> Component
 
 Components : Type

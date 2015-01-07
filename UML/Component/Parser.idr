@@ -56,11 +56,11 @@ component = do
     pure $ MkComponent name is cs
    <?> "Component"
   where
-    cbody : Parser (Interfaces, Maybe (List Component))
+    cbody : Parser (Interfaces, (List Component))
     cbody = do
       is <- some (interface <$ space)
       cs <- opt $ some (component <$ space)
-      pure (is, cs)
+      pure (is, fromMaybe Nil cs)
 
 -- ----------------------------------------------------------------- [ Diagram ]
 
