@@ -4,9 +4,13 @@
 -- Copyright   : (c) Jan de Muijnck-Hughes
 -- License     : see LICENSE
 -- --------------------------------------------------------------------- [ EOH ]
-module UML.Utils.Readfile
+module UML.Utils.Reading
 
-import UML.Effs
+import Effects
+import Effect.StdIO
+import Effect.System
+import Effect.Exception
+import Effect.File
 
 %access private
 
@@ -21,7 +25,7 @@ consumeFile = readAcc ""
 
 ||| Read file...
 public
-readFile : (fname : String) -> {UMLEffs} Eff String
+readFile : (fname : String) -> {[EXCEPTION String, FILE_IO ()]} Eff String
 readFile fname = do
     case !(open fname Read) of
       True => do
