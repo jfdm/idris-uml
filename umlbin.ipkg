@@ -5,5 +5,4 @@ opts = "-p lightyear -p effects -p uml"
 modules = Main
 
 main = Main
-sourcedir = src
 executable = uml.bin

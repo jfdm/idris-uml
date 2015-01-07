@@ -2,8 +2,6 @@ package uml
 
 opts = "-p lightyear -p effects"
 
-sourcedir = src
-
 modules = UML
 
         , UML.Class
