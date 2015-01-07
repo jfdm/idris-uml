@@ -6,6 +6,6 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Deployment
 
-import UML.Deployment.Model
-import UML.Deployment.Parser
+import public UML.Deployment.Model
+import public UML.Deployment.Parser
 -- --------------------------------------------------------------------- [ EOF ]

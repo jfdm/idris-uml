@@ -6,6 +6,6 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Sequence
 
-import UML.Sequence.Model
-import UML.Sequence.Parser
+import public UML.Sequence.Model
+import public UML.Sequence.Parser
 -- --------------------------------------------------------------------- [ EOF ]

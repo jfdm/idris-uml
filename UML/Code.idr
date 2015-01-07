@@ -6,6 +6,6 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Code
 
-import UML.Code.Model
-import UML.Code.Parser
+import public UML.Code.Model
+import public UML.Code.Parser
 -- --------------------------------------------------------------------- [ EOF ]
