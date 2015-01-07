@@ -8,16 +8,8 @@ module UML.Class.Model
 
 data Modifier = Abstract | Static
 data Visibility = Private | Protected | Package | Public
-
-data RelationTy = Specialisation
-                | Aggregation
-                | Composition
-                | Association
-                | Realisation
-
-data ClassTy = ClassAbstract
-             | ClassStandard
-             | ClassInterface
+data RelationTy = Specialisation | Aggregation | Composition | Association | Realisation
+data ClassTy = ClassAbstract | ClassStandard | ClassInterface
 
 -- ----------------------------------------------------------------- [ Methods ]
 
@@ -76,7 +68,6 @@ CRelations = List ClassRelation
 data ClassModel : Type where
     MkClassModel : Classes -> CRelations -> ClassModel
 
-
 -- ---------------------------------------------------------------------- [ Eq ]
 
 instance Eq Modifier where
@@ -92,7 +83,7 @@ instance Eq Visibility where
     (==) _         _         = False
 
 instance Eq RelationTy where
-    (==) Specialiastion Specialiastion = True
+    (==) Specialisation Specialisation = True
     (==) Aggregation    Aggregation    = True
     (==) Composition    Composition    = True
     (==) Association    Association    = True
