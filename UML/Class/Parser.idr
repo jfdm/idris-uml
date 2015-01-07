@@ -6,11 +6,11 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Class.Parser
 
-import Lightyear.Core
-import Lightyear.Combinators
+import Lightyear
 import Lightyear.Strings
 
 import UML.Class.Model
+import UML.Types
 
 import UML.Utils.Parsing
 
@@ -157,10 +157,10 @@ clazz = bodyClass <|> emptyClass <?> "Class"
 -- ----------------------------------------------------------- [ Class Diagram ]
 
 public
-classModel : Parser ClassModel
+classModel : Parser UML
 classModel = do
     cs <- some (clazz <$ space)
     rs <- some (relation <$ space)
-    pure $ MkClassModel cs rs
+    pure $ Class $ MkClassModel cs rs
   <?> "Class Diagram"
 -- --------------------------------------------------------------------- [ EOF ]

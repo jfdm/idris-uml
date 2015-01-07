@@ -7,8 +7,6 @@
 module UML.Utils.Reading
 
 import Effects
-import Effect.StdIO
-import Effect.System
 import Effect.Exception
 import Effect.File
 

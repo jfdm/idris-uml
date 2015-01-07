@@ -6,9 +6,10 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Component.Parser
 
-import Lightyear.Core
-import Lightyear.Combinators
+import Lightyear
 import Lightyear.Strings
+
+import UML.Types
 
 import UML.Code.Model
 import UML.Code.Parser
@@ -64,12 +65,12 @@ component = do
 -- ----------------------------------------------------------------- [ Diagram ]
 
 public
-componentModel : Parser ComponentModel
+componentModel : Parser UML
 componentModel = do
     ds <- some (dtype <$ space)
     space
     cs <- some (component <$ space)
-    pure $ MkComponentModel ds cs
+    pure $ Component $ MkComponentModel ds cs
   <?> "Component Model"
 
 -- --------------------------------------------------------------------- [ EOF ]

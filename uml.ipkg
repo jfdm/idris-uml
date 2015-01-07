@@ -24,3 +24,5 @@ modules = UML
 
         , UML.Utils.Reading
         , UML.Utils.Parsing
+
+        , UML.Reader

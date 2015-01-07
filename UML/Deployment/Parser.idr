@@ -6,9 +6,10 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Deployment.Parser
 
-import Lightyear.Core
-import Lightyear.Combinators
+import Lightyear
 import Lightyear.Strings
+
+import UML.Types
 
 import UML.Deployment.Model
 import UML.Utils.Parsing
@@ -149,10 +150,10 @@ device = do
       pure (es, ps)
 
 public
-deploymentModel : Parser DeploymentModel
+deploymentModel : Parser UML
 deploymentModel = do
     ds <- some (device <$ space)
     rs <- some (relation <$ space)
-    pure $ MkDeployment ds rs
+    pure $ Deployment $ MkDeployment ds rs
   <?> "Deployment Model"
 -- --------------------------------------------------------------------- [ EOF ]

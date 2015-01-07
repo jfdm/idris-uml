@@ -6,9 +6,10 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Sequence.Parser
 
-import Lightyear.Core
-import Lightyear.Combinators
+import Lightyear
 import Lightyear.Strings
+
+import UML.Types
 
 import UML.Sequence.Model
 import UML.Utils.Parsing
@@ -29,9 +30,9 @@ step = do
 
 ||| Parse a sequence diagram, a series of steps.
 public
-sequenceModel : Parser SequenceModel
+sequenceModel : Parser UML
 sequenceModel = do
     ss <- space $> some (step <$ space)
-    pure ss
+    pure $ Sequence ss
   <?> "Sequence Model"
 -- --------------------------------------------------------------------- [ EOF ]
