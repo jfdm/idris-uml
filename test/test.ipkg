@@ -1,0 +1,8 @@
+package test
+
+opts = "-p lightyear -p effects -p uml"
+
+modules = Main, TestRunner, ParsingTest
+
+executable = a.out
+main = Main

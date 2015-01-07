@@ -20,6 +20,10 @@ modules = UML
         , UML.Component.Model
         , UML.Component.Parser
 
+        , UML.Code
+        , UML.Code.Model
+        , UML.Code.Parser
+
         , UML.Types
 
         , UML.Utils.Reading

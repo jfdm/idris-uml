@@ -6,9 +6,10 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML
 
-import UML.Class
-import UML.Sequence
-import UML.Deployment
-import UML.Component
-
+import public UML.Class
+import public UML.Sequence
+import public UML.Deployment
+import public UML.Component
+import public UML.Code
+import public UML.Types
 -- --------------------------------------------------------------------- [ EOF ]

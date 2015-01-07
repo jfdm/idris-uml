@@ -18,6 +18,8 @@ import UML.Class
 import UML.Sequence
 import UML.Deployment
 import UML.Component
+import UML.Code
+
 import UML.Types
 
 import public UML.Utils.Reading

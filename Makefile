@@ -2,13 +2,9 @@
 
 IDRIS := idris
 LIB   := uml
-BIN   := ${LIB}bin
 OPTS  :=
 
 .PHONY: clean lib
-
-exe: lib
-	${IDRIS} ${OPTS} --build ${BIN}.ipkg
 
 install: lib
 	${IDRIS} ${OPTS} --install ${LIB}.ipkg
@@ -24,12 +20,13 @@ clean:
 check: clobber
 	${IDRIS} --checkpkg ${LIB}.ipkg
 
-clobber : clean
+clobber: clean
 	find . -name "*.ibc" -delete
 
-test :
-	echo "Not yet, tests are old and broken."
-	 #(cd tests; bash runtests.sh)
+test: install
+	$(MAKE) -C test build
+	(cd test; ./a.out)
+	$(MAKE) -C test clean
 
 doc:
 	${IDRIS} --mkdoc ${LIB}.ipkg
