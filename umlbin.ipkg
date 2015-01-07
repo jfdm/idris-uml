@@ -1,8 +1,0 @@
-package umlbin
-
-opts = "-p lightyear -p effects -p uml"
-
-modules = Main
-
-main = Main
-executable = uml.bin
