@@ -26,98 +26,71 @@ Attribute = (String, String)
 Attributes : Type
 Attributes = List Attribute
 
--- ---------------------------------------------------------- [ Specifications ]
-||| Description of a named deployment specification for artifacts.
-data Specification : Type where
-  ||| Construct a new deployment specification.
+
+data ElemTy = SPEC | ARTIFACT | ENV | DEVICE | RELA | MODEL
+
+-- ------------------------------------------------------------------- [ Model ]
+
+||| A model for UML Deployment Diagrams.
+data DeploymentModel : ElemTy -> Type where
+  ||| Description of a named deployment specification for artifacts.
   |||
   ||| @ident The name of the deployment specification,
   ||| @as The specification as KV pairs.
-  MkSpec : (ident : String)
-         -> (as : Maybe Attributes)
-         -> Specification
+  Spec : (ident : String)
+         -> (as : Attributes) -> DeploymentModel SPEC
 
--- --------------------------------------------------------------- [ Artifacts ]
-
-||| Resources that are to be deployed in execution environments on devices.
-data Artifact : Type where
-  ||| Construct a new artifact.
+  ||| Resources that are to be deployed in execution environments on devices.
   |||
   ||| @ty The type of artifact.
   ||| @ident The identify of the artifact.
   ||| @spec A possible specification schema that describes deployment.
-  MkArtifact : (ty : ArtifactTy)
+  Artifact : (ty : ArtifactTy)
              -> (ident : String)
-             -> (spec : Maybe Specification)
-             -> Artifact
+             -> (spec : Maybe (DeploymentModel SPEC))
+             -> DeploymentModel ARTIFACT
 
-Artifacts : Type
-Artifacts = List Artifact
-
--- -------------------------------------------------------------------- [ Envs ]
-
-||| A execution environment in which artifacts are run or hosted.
-data Env : Type where
-  ||| Construct an execution environment.
+  ||| A execution environment in which artifacts are run or hosted.
   |||
   ||| @ty The type of environment.
   ||| @ident The identity of the environment.
   ||| @as The artifacts being executed/hosted within the environment.
   ||| @ps A possible set of properties for the environment.
-  MkEnv : (ty : EnvTy)
-        -> (ident : String)
-        -> (as : Artifacts)
-        -> (ps : Maybe Attributes)
-        -> Env
+  Env : (ty : EnvTy)
+      -> (ident : String)
+      -> (as : List $ DeploymentModel ARTIFACT)
+      -> (ps : Maybe Attributes)
+      -> DeploymentModel ENV
 
-Envs : Type
-Envs = List Env
-
--- ----------------------------------------------------------------- [ Devices ]
-
-||| A physical device in the deployment diagram.
-data Device : Type where
-  ||| Construct a physical device.
+  ||| A physical device in the deployment diagram.
   |||
   ||| @ty The type of the device.
   ||| @ident The identity of the device.
   ||| @es The execution environments hosted on the device.
   ||| @as A possible list of tags describing details over the device.
-  MkDevice : (ty : DeviceTy)
-           -> (ident : String)
-           -> (es : Envs)
-           -> (as : Maybe Attributes)
-           -> Device
+  Device : (ty : DeviceTy)
+         -> (ident : String)
+         -> (es : List $ DeploymentModel ENV)
+         -> (as : Maybe Attributes)
+         -> DeploymentModel DEVICE
 
-Devices : Type
-Devices = List Device
-
--- --------------------------------------------------------------- [ Relations ]
-
-||| Describes how different devices, and different execution environments, talk to each other.
-data Relation : Type where
-  ||| Construct a relation between two nodes.
+  ||| Describes how different devices, and different execution environments, talk to each other.relation between two nodes.
   |||
   ||| @nodeA A device.
   ||| @nodeB The other device being communicated with.
   ||| @protocol The protocol being used for communication.
-  MkRelation : (nodeA : String)
+  Relation : (nodeA : String)
             -> (nodeB : String)
             -> (protocol : String)
-            -> Relation
+            -> DeploymentModel RELA
 
-Relations : Type
-Relations = List Relation
-
-||| A model for UML Deployment Diagrams.
-data DeploymentModel : Type where
-  ||| Construct a Deployment Diagram
+  ||| A model for UML Deployment Diagrams.
   |||
   ||| @ds The physical devices.
   ||| @rs The relations between the devices.
-  MkDeployment : (ds : Devices)
-               -> (rs : Relations)
-               -> DeploymentModel
+  MkDeployment : (ds : List $ DeploymentModel DEVICE)
+               -> (rs : List $ DeploymentModel $ RELA)
+               -> DeploymentModel MODEL
 
 -- ---------------------------------------------------------------------- [ Eq ]
 
@@ -145,24 +118,21 @@ instance Eq ArtifactTy where
   (==) Script       Script     = True
   (==) _            _          = False
 
-instance Eq Specification where
-  (==) (MkSpec x xs) (MkSpec y ys) = x == y && xs == ys
 
-instance Eq Artifact where
-  (==) (MkArtifact xTy x xs) (MkArtifact yTy y ys) = xTy == yTy && x == y && xs == ys
+mutual
 
-instance Eq Env where
-  (==) (MkEnv xTy x xs xxs) (MkEnv yTy y ys yys) = xTy == yTy && x == y && xs == ys && xxs == yys
+  %assert_total
+  eqDepModel : (DeploymentModel x) -> (DeploymentModel x) -> Bool
+  eqDepModel (MkDeployment xds xrs) (MkDeployment yds yrs) = xds == yds && xrs == yrs
+  eqDepModel (Spec x xs)            (Spec y ys)            = x == y && xs == ys
+  eqDepModel (Artifact xTy x xs)    (Artifact yTy y ys)    = xTy == yTy && x == y && xs == ys
+  eqDepModel (Env xTy x xs xxs)     (Env yTy y ys yys)     = xTy == yTy && x == y && xs == ys && xxs == yys
+  eqDepModel (Device xTy x xs xxs)  (Device yTy y ys yys)  = xTy == yTy && x == y && xs == ys && xxs == yys
+  eqDepModel (Relation xa xb xp)    (Relation ya yb yp)    = xa == ya && xb == yb && xp == yp
+  eqDepModel _                      _                      = False
 
-instance Eq Device where
-  (==) (MkDevice xTy x xs xxs) (MkDevice yTy y ys yys) = xTy == yTy && x == y && xs == ys && xxs == yys
-
-instance Eq Relation where
-  (==) (MkRelation xa xb xp) (MkRelation ya yb yp) = xa == ya && xb == yb && xp == yp
-
-instance Eq DeploymentModel where
-  (==) (MkDeployment xds xrs) (MkDeployment yds yrs) = xds == yds && xrs == yrs
-
+  instance Eq (DeploymentModel x) where
+    (==) = eqDepModel
 -- -------------------------------------------------------------------- [ Show ]
 
 instance Show DeviceTy where
@@ -186,27 +156,12 @@ instance Show ArtifactTy where
   show Executable = "Executable"
   show Script     = "Script"
 
-instance Show Specification where
-  show (MkSpec id as) = unwords
-       ["[Specification", show id, show as, "]"]
-
-instance Show Artifact where
-  show (MkArtifact ty id spec) = unwords
-       ["[Artifact", show ty, show id, show spec, "]"]
-
-instance Show Env where
-  show (MkEnv ty id as ps) = unwords
-       ["[Env", show ty, show id, show as, show ps, "]"]
-
-instance Show Device where
-  show (MkDevice ty id es as) = unwords
-       ["[Device", show ty, show id, show es, show as, "]"]
-
-instance Show Relation where
-  show (MkRelation xID yID proto) = "[Relation " ++ xID ++ " " ++ yID ++ " " ++ proto ++ "]"
-
-instance Show DeploymentModel where
-  show (MkDeployment ds rs) = unwords
-       ["[DeployModel", show ds, show rs, "]"]
+instance Show (DeploymentModel x) where
+  show (MkDeployment ds rs)     = unwords ["[DeployModel", show ds, show rs, "]"]
+  show (Spec id as)             = unwords ["[Specification", show id, show as, "]"]
+  show (Artifact ty id spec)    = unwords ["[Artifact", show ty, show id, show spec, "]"]
+  show (Env ty id as ps)        = unwords ["[Env", show ty, show id, show as, show ps, "]"]
+  show (Device ty id es as)     = unwords ["[Device", show ty, show id, show es, show as, "]"]
+  show (Relation xID yID proto) = "[Relation " ++ xID ++ " " ++ yID ++ " " ++ proto ++ "]"
 
 -- --------------------------------------------------------------------- [ EOF ]

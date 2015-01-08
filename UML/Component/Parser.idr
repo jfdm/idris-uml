@@ -18,14 +18,14 @@ import UML.Component.Model
 import UML.Utils.Parsing
 
 -- --------------------------------------------------------------- [ Interface ]
-actual : Parser Interface
+actual : Parser $ ComponentModel INTERFACE
 actual = do
     token "interface"
     id <- ident <$ space
     fs <- braces (some (funcs <$ space) <$ space)
     pure $ Actual id fs
 
-provides : Parser Interface
+provides : Parser $ ComponentModel INTERFACE
 provides = do
     token "provides"
     id <- ident <$ space
@@ -34,7 +34,7 @@ provides = do
     pure $ Provided id orig
   <?> "Provides"
 
-requires : Parser Interface
+requires : Parser $ ComponentModel INTERFACE
 requires = do
     token "requires"
     id <- ident <$ space
@@ -43,12 +43,12 @@ requires = do
     pure $ Required id orig
    <?> "Requires"
 
-interface : Parser Interface
+interface : Parser $ ComponentModel INTERFACE
 interface = provides <|> requires <|> actual <?> "Interface"
 
 -- --------------------------------------------------------------- [ Component ]
 
-component : Parser Component
+component : Parser $ ComponentModel COMPONENT
 component = do
     token "component"
     name <- ident <$ space
@@ -56,7 +56,7 @@ component = do
     pure $ MkComponent name is cs
    <?> "Component"
   where
-    cbody : Parser (Interfaces, (List Component))
+    cbody : Parser (List $ ComponentModel INTERFACE, (List $ ComponentModel COMPONENT))
     cbody = do
       is <- some (interface <$ space)
       cs <- opt $ some (component <$ space)
