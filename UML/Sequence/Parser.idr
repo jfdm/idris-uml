@@ -17,7 +17,7 @@ import UML.Utils.Parsing
 %access private
 
 ||| Parse a single step.
-step : Parser MessageStep
+step : Parser $ SequenceModel SEND
 step = do
     from <- ident <$ space
     token "->"
@@ -25,7 +25,7 @@ step = do
     colon
     ms <- commaSep1 (ident)
     eol
-    pure $ MkStep from to ms
+    pure $ Send from to ms
   <?> "Step"
 
 ||| Parse a sequence diagram, a series of steps.
@@ -33,6 +33,6 @@ public
 sequenceModel : Parser UML
 sequenceModel = do
     ss <- space $> some (step <$ space)
-    pure $ Sequence ss
+    pure $ Sequence $ MkSeqModel $ mkStep ss
   <?> "Sequence Model"
 -- --------------------------------------------------------------------- [ EOF ]

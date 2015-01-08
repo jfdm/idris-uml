@@ -10,7 +10,7 @@ data UMLTy = CLAZZ | SEQUENCE | DEPLOYMENT | COMPONENT
 data UML : Type where
   Class      : ClassModel MODEL -> UML
   Component  : ComponentModel   -> UML
-  Sequence   : SequenceModel    -> UML
+  Sequence   : SequenceModel MODEL -> UML
   Deployment : DeploymentModel  -> UML
 
 
