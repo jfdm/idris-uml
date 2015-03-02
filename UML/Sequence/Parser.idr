@@ -11,6 +11,9 @@ import Lightyear.Strings
 
 import UML.Types
 
+import UML.Code.Model
+import UML.Code.Parser
+
 import UML.Sequence.Model
 import UML.Utils.Parsing
 
@@ -19,12 +22,11 @@ import UML.Utils.Parsing
 ||| Parse a single step.
 step : Parser $ SequenceModel SEND
 step = do
-    from <- ident <$ space
+    from <- ident <* space
     token "->"
-    to <- ident <$ space
+    to <- ident <* space
     colon
-    ms <- commaSep1 (ident)
-    eol
+    ms <- parens $ commaSep1 attr
     pure $ Send from to ms
   <?> "Step"
 
@@ -32,7 +34,9 @@ step = do
 public
 sequenceModel : Parser UML
 sequenceModel = do
-    ss <- space $> some (step <$ space)
-    pure $ Sequence $ MkSeqModel $ mkStep ss
+    ds <- some (dtype <* space)
+    space
+    ss <- some (step <* space)
+    pure $ Sequence $ MkSeqModel ds (mkStep ss)
   <?> "Sequence Model"
 -- --------------------------------------------------------------------- [ EOF ]

@@ -56,9 +56,9 @@ relationType = do token "<|--"
 
 relation : Parser $ ClassModel RELA
 relation = do
-    f <- ident <$ space
+    f <- ident <* space
     relTy <- relationType
-    t <- ident <$ space
+    t <- ident <* space
     desc <- opt description
     pure $ Relation relTy f t desc
 
@@ -66,9 +66,9 @@ relation = do
 
 param : Parser $ ClassModel PARAM
 param = do
-    id <- ident <$ space
+    id <- ident <* space
     colon
-    ty <- ident <$ space
+    ty <- ident <* space
     pure $ Param id ty
   <?> "Param"
 
@@ -94,7 +94,7 @@ attribute : Parser $ ClassModel ATTR
 attribute = do
     mod <- opt $ braces modifier
     vis <- visibility
-    id  <- ident <$ space
+    id  <- ident <* space
     colon
     ty  <- ident
     pure $ Attribute id ty mod vis
@@ -159,8 +159,8 @@ clazz = bodyClass <|> emptyClass <?> "Class"
 public
 classModel : Parser UML
 classModel = do
-    cs <- some (clazz <$ space)
-    rs <- some (relation <$ space)
+    cs <- some (clazz <* space)
+    rs <- some (relation <* space)
     pure $ Class $ MkClassModel cs rs
   <?> "Class Diagram"
 -- --------------------------------------------------------------------- [ EOF ]

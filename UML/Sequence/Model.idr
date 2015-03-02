@@ -6,6 +6,8 @@
 -- --------------------------------------------------------------------- [ EOH ]
 module UML.Sequence.Model
 
+import UML.Code.Model
+
 %access public
 
 data ElemTy = MODEL | STEP | SEND | LOOP | SWITCH | CHOICE
@@ -23,17 +25,23 @@ data SequenceModel : ElemTy -> Type where
   ||| @ms The messages being sent.
   Send : (from : String)
        -> (to : String)
-       -> (ms : List String) -> SequenceModel SEND
-  Choice : (condition : String) -> (List (SequenceModel SEND)) -> SequenceModel CHOICE
-  Loop : (condition : String) -> (List (SequenceModel SEND)) -> SequenceModel LOOP
-  Opt  : SequenceModel CHOICE -> SequenceModel CHOICE -> SequenceModel SWITCH
+       -> (ms : List (String, String)) -> SequenceModel SEND
+  Choice : (condition : String)
+         -> (List (SequenceModel SEND))
+         -> SequenceModel CHOICE
+  Loop : (condition : String)
+       -> (List (SequenceModel SEND))
+       -> SequenceModel LOOP
+  Opt  : SequenceModel CHOICE
+       -> SequenceModel CHOICE
+       -> SequenceModel SWITCH
   Alt  : List (SequenceModel CHOICE) -> SequenceModel SWITCH
   Nil  : SequenceModel STEP
   (::) : (SequenceModel a)
        -> {auto prf : OkElem a}
        -> SequenceModel STEP
        -> SequenceModel STEP
-  MkSeqModel : SequenceModel STEP -> SequenceModel MODEL
+  MkSeqModel : List DType -> SequenceModel STEP -> SequenceModel MODEL
 
 mkStep : List (SequenceModel a) -> {auto prf : OkElem a} -> SequenceModel STEP
 mkStep Nil       = Model.Nil
@@ -53,15 +61,15 @@ mutual
 
   %assert_total
   eqSeqModel : (SequenceModel a) -> (SequenceModel b) -> Bool
-  eqSeqModel (Send af at as) (Send bf bt bs) = af == bf && at == bt && as == bs
-  eqSeqModel (Choice a as)   (Choice b bs)   = a == b && as == bs
-  eqSeqModel (Loop a as)     (Loop b bs)     = a == b && as == bs
-  eqSeqModel (Opt ax ay)     (Opt bx by)     = ax == bx && ay == by
-  eqSeqModel (Alt as)        (Alt bs)        = as == bs
-  eqSeqModel Nil             Nil             = True
-  eqSeqModel (x::xs) (y::ys)                 = eqSeqModel x y && eqSeqModel xs ys
-  eqSeqModel (MkSeqModel a)  (MkSeqModel b)  = a == b
-  eqSeqModel _               _               = False
+  eqSeqModel (Send af at as)  (Send bf bt bs)  = af == bf && at == bt && as == bs
+  eqSeqModel (Choice a as)    (Choice b bs)    = a == b && as == bs
+  eqSeqModel (Loop a as)      (Loop b bs)      = a == b && as == bs
+  eqSeqModel (Opt ax ay)      (Opt bx by)      = ax == bx && ay == by
+  eqSeqModel (Alt as)         (Alt bs)         = as == bs
+  eqSeqModel Nil              Nil              = True
+  eqSeqModel (x::xs)          (y::ys)          = eqSeqModel x y && eqSeqModel xs ys
+  eqSeqModel (MkSeqModel x a) (MkSeqModel y b) = a == b && x == y
+  eqSeqModel _                _                = False
 
   instance Eq (SequenceModel x) where
     (==) = eqSeqModel
@@ -87,6 +95,6 @@ instance Show (SequenceModel x) where
     where
       showXS : SequenceModel STEP -> String
       showXS (x::xs) = show x ++ "," ++ showXS xs
-  show (MkSeqModel m)  = unwords ["[Seq ", show m, "]\n"]
+  show (MkSeqModel ds m) = unwords ["[Seq ", show ds, show m, "]\n"]
 
 -- --------------------------------------------------------------------- [ EOF ]

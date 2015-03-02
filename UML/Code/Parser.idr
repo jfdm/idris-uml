@@ -18,24 +18,24 @@ import UML.Utils.Parsing
 -- -------------------------------------------------------------------- [ Data ]
 attr : Parser (String, String)
 attr = do
-    n <- ident <$ space
+    n <- ident <* space
     colon
-    ty <- ident <$ space
+    ty <- ident <* space
     pure $ MkPair n ty
   <?> "Parse Attribute"
 
 simpleDtype : Parser DType
 simpleDtype = do
     token "data"
-    id <- ident <$ space
+    id <- ident <* space
     pure $ MkSType id
    <?> "Simple Data Type"
 
 complexDtype : Parser DType
 complexDtype = do
     token "data"
-    id <- ident <$ space
-    body <- braces (commaSep1 (attr <$ space) <$ space)
+    id <- ident <* space
+    body <- braces (commaSep1 (attr <* space) <* space)
     pure $ MkCType id body
    <?> "Complex Data Type"
 
@@ -46,16 +46,16 @@ dtype = complexDtype <|> simpleDtype <?> "Data Types"
 
 paramfunc : Parser Function
 paramfunc = do
-    id <- ident <$ space
+    id <- ident <* space
     colon
-    ps <- some (parens attr <$ token "->")
-    rty <- ident <$ space
+    ps <- some (parens attr <* token "->")
+    rty <- ident <* space
     pure $ MkPFunc id ps rty
   <?> "Func with parameters"
 
 noparamfunc : Parser Function
 noparamfunc = do
-    id <- ident <$ space
+    id <- ident <* space
     colon
     rty <- ident
     pure $ MkFunc id rty

@@ -21,15 +21,15 @@ import UML.Utils.Parsing
 actual : Parser $ ComponentModel INTERFACE
 actual = do
     token "interface"
-    id <- ident <$ space
-    fs <- braces (some (funcs <$ space) <$ space)
+    id <- ident <* space
+    fs <- braces (some (funcs <* space) <* space)
     pure $ Actual id fs
 
 provides : Parser $ ComponentModel INTERFACE
 provides = do
     token "provides"
-    id <- ident <$ space
-    orig <- (token "from" $> ident)
+    id <- ident <* space
+    orig <- (token "from" *> ident)
     space
     pure $ Provided id orig
   <?> "Provides"
@@ -37,9 +37,9 @@ provides = do
 requires : Parser $ ComponentModel INTERFACE
 requires = do
     token "requires"
-    id <- ident <$ space
+    id <- ident <* space
     token "from"
-    orig <- ident <$ space
+    orig <- ident <* space
     pure $ Required id orig
    <?> "Requires"
 
@@ -51,15 +51,15 @@ interface = provides <|> requires <|> actual <?> "Interface"
 component : Parser $ ComponentModel COMPONENT
 component = do
     token "component"
-    name <- ident <$ space
-    (is, cs) <- braces (cbody <$ space)
+    name <- ident <* space
+    (is, cs) <- braces (cbody <* space)
     pure $ MkComponent name is cs
    <?> "Component"
   where
     cbody : Parser (List $ ComponentModel INTERFACE, (List $ ComponentModel COMPONENT))
     cbody = do
-      is <- some (interface <$ space)
-      cs <- opt $ some (component <$ space)
+      is <- some (interface <* space)
+      cs <- opt $ some (component <* space)
       pure (is, fromMaybe Nil cs)
 
 -- ----------------------------------------------------------------- [ Diagram ]
@@ -67,9 +67,9 @@ component = do
 public
 componentModel : Parser UML
 componentModel = do
-    ds <- some (dtype <$ space)
+    ds <- some (dtype <* space)
     space
-    cs <- some (component <$ space)
+    cs <- some (component <* space)
     pure $ Component $ MkComponentModel ds cs
   <?> "Component Model"
 

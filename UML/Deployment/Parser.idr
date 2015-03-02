@@ -22,7 +22,7 @@ import UML.Utils.Parsing
 |||
 kvpair : Parser Attribute
 kvpair = do
-    key <- ident <$ space
+    key <- ident <* space
     colon
     value <- literallyBetween '\"'
     pure (key, value)
@@ -30,7 +30,7 @@ kvpair = do
 
 ||| Parse pair of braces containing many comma separated KV pairs.
 kvBody : Parser Attributes
-kvBody = braces $ (commaSep1 (kvpair <$ space) <$ space)
+kvBody = braces $ (commaSep1 (kvpair <* space) <* space)
   <?> "KV Body"
 
 ||| Parse several properties.
@@ -45,11 +45,11 @@ properties = do
 ||| Parse a relation defined between two entities.
 relation : Parser $ DeploymentModel RELA
 relation = do
-    xID <- ident <$ space
+    xID <- ident <* space
     token "commsWith"
-    yID <- ident <$ space
+    yID <- ident <* space
     token "via"
-    proto <- ident <$ space
+    proto <- ident <* space
     pure $ Relation xID yID proto
   <?> "Relation"
 
@@ -58,7 +58,7 @@ relation = do
 spec : Parser $ DeploymentModel SPEC
 spec = do
     token "spec"
-    id <- ident <$ space
+    id <- ident <* space
     as <- opt kvBody
     pure $ Spec id $ fromMaybe Nil as
 
@@ -81,14 +81,14 @@ artifact : Parser $ DeploymentModel ARTIFACT
 artifact = do
     token "artifact"
     ty <- artifactTy
-    id <- ident <$ space
+    id <- ident <* space
     s <- opt artBody
     pure $ Artifact ty id s
    <?> "Artifact"
   where
     artBody : Parser (DeploymentModel SPEC)
     artBody = do
-      token "with" <$ space
+      token "with" <* space
       s <- spec
       pure s
 
@@ -110,16 +110,16 @@ envTy = do token "os"
 exenv : Parser $ DeploymentModel ENV
 exenv = do
     token "env"
-    ty <- envTy <$ space
-    id <- ident <$ space
-    (as, ps) <- braces (exenvBody <$ space)
+    ty <- envTy <* space
+    id <- ident <* space
+    (as, ps) <- braces (exenvBody <* space)
     pure $ Env ty id as ps
    <?> "Execution Environment"
   where
     exenvBody : Parser (List $ DeploymentModel ARTIFACT, Maybe Attributes)
     exenvBody = do
-      as <- some (artifact <$ space)
-      ps <- opt properties <$ space
+      as <- some (artifact <* space)
+      ps <- opt properties <* space
       pure (as, ps)
 
 -- ----------------------------------------------------------------- [ Devices ]
@@ -138,22 +138,22 @@ device : Parser $ DeploymentModel DEVICE
 device = do
     token "device"
     ty <- opt devTy
-    id <- ident <$ space
+    id <- ident <* space
     (es, ps) <- braces $ deviceBody
     pure $ Device (fromMaybe GenericDev ty) id es ps
    <?> "Device"
   where
     deviceBody : Parser (List $ DeploymentModel ENV, Maybe Attributes)
     deviceBody = do
-      es <- some (exenv <$ space)
-      ps <- opt properties <$ space
+      es <- some (exenv <* space)
+      ps <- opt properties <* space
       pure (es, ps)
 
 public
 deploymentModel : Parser UML
 deploymentModel = do
-    ds <- some (device <$ space)
-    rs <- some (relation <$ space)
+    ds <- some (device <* space)
+    rs <- some (relation <* space)
     pure $ Deployment $ MkDeployment ds rs
   <?> "Deployment Model"
 -- --------------------------------------------------------------------- [ EOF ]
