@@ -42,6 +42,6 @@ literallyBetween c = map pack $ between (char c) (char c) (some (satisfy (/= c))
 
 ||| End of Line Parser
 eol : Parser ()
-eol = char '\n'
+eol = char '\n' *> return ()
 
 -- --------------------------------------------------------------------- [ EOF ]
